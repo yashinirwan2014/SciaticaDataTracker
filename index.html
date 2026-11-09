@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#090909">
-<meta name="description" content="A private, browser-based daily log for pain ratings, study hours and walking activity. Records stay on this device and can be backed up as CSV.">
-<title>Sciatica Data Tracker</title>
+<meta name="description" content="A private, browser-based wellbeing tracker with student and adult views, daily activity records and study planning. Records stay on this device.">
+<title>Sciatica & Wellbeing Tracker</title>
 <style>
 :root{color-scheme:dark;--bg:#090909;--panel:#121212;--panel2:#181818;--line:#303030;--muted:#aaa;--white:#f5f4f0;--accent:#d8b77e;--red:#e08c82;--green:#a6c8a0;--max:1120px}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--white);font:15px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}button,input,textarea{font:inherit}a{color:inherit}.wrap{width:min(var(--max),calc(100% - 36px));margin:auto}
@@ -39,9 +39,16 @@ footer{border-top:1px solid var(--line);padding:23px 0 35px;color:#888;font-size
 </style>
 </head>
 <body>
-<header><div class="wrap bar"><a class="brand" href="#">SCIATICA <span>/</span> DAILY TRACKER</a><nav aria-label="Main navigation"><a href="#entry">Add entry</a><a href="#history">History</a><a href="#insights">Summary</a><a href="#health-info">Sciatica info</a></nav></div></header>
+<header><div class="wrap bar"><a class="brand" href="#">WELLBEING <span>/</span> DAILY TRACKER</a><nav aria-label="Main navigation"><a href="#audience-choice">Choose view</a><a href="#entry">Daily entry</a><a href="#study-planner">Planner</a><a href="#history">History</a><a href="#health-info">Health info</a></nav></div></header>
 <main class="wrap">
-<section class="intro"><div><div class="eyebrow">A small daily record</div><h1>Your log, in one place.</h1><p>Record pain ratings, study time and walking activity. Review your own entries over time without creating an account.</p></div><div class="privacy">● Saved only in this browser</div></section>
+<section class="intro"><div><div class="eyebrow">A small daily record</div><h1>Your log, in one place.</h1><p id="introDescription">Choose the view that fits your routine. Both use the same private daily tracker.</p></div><div class="privacy">● Saved only in this browser</div></section>
+<section class="panel section-gap" id="audience-choice">
+<h2>Choose your section</h2><p class="hint">The sections organise the same tools around different daily routines. You can switch at any time; your saved entries are not changed.</p>
+<div class="info-grid">
+<div class="info-card"><div class="small-label">For students</div><h2>Study & daily routine</h2><p>Plan subject-wise sessions, compare planned and actual study time, record walking breaks and keep clinician-advised movement notes.</p><button type="button" class="primary" id="studentView">Open student section</button></div>
+<div class="info-card"><div class="small-label">For adults</div><h2>Daily wellbeing</h2><p>Review daily symptoms and activity, record movement notes, and organise personal care and appointment notes.</p><button type="button" id="adultView">Open adult section</button></div>
+</div><div class="status" id="audienceStatus" role="status" aria-live="polite"></div>
+</section>
 <section class="stats" aria-label="Summary statistics">
 <div class="stat"><span>Days recorded</span><strong id="totalDays">0</strong></div><div class="stat"><span>Average pain rating</span><strong id="avgPain">—</strong></div><div class="stat"><span>Total study hours</span><strong id="totalStudy">0</strong></div><div class="stat"><span>Total walking minutes</span><strong id="totalWalk">0</strong></div>
 </section>
@@ -181,6 +188,7 @@ footer{border-top:1px solid var(--line);padding:23px 0 35px;color:#888;font-size
 const STORAGE_KEY = "sciaticaDailyRecordsV1";
 let records = loadRecords();
 let editingDate = "";
+let activeAudience = "student";
 
 function loadRecords() {
   try {
@@ -321,9 +329,6 @@ function renderInsights(ordered) {
     line.append(label,track,value); activity.appendChild(line);
   });
 }
-function resetForm() {
-  document.getElementById("recordForm").reset();
-  
 function plannerRecord() {
   const date = document.getElementById("plannerDate").value;
   return records.find(item => item.date === date);
@@ -377,10 +382,10 @@ document.getElementById("addExercise").addEventListener("click",() => {
   savePlannerItem("exercise",{name,duration,reps,sets,actual,timing:document.getElementById("exerciseTiming").value.trim(),notes:document.getElementById("exerciseNotes").value.trim()});
   ["exerciseName","exerciseDuration","exerciseReps","exerciseSets","exerciseTiming","exerciseNotes"].forEach(id=>document.getElementById(id).value="");
   document.getElementById("exerciseActual").value="0";
-}
-);
-
-document.getElementById("date").value = new Date().toLocaleDateString("en-CA");
+});
+function resetForm() {
+  document.getElementById("recordForm").reset();
+  document.getElementById("date").value = new Date().toLocaleDateString("en-CA");
   document.getElementById("breaks").value = "0";
   document.getElementById("walking").value = "0";
   editingDate = "";
