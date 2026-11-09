@@ -199,7 +199,8 @@ function render() {
   document.getElementById("totalStudy").textContent = studyTotal.toFixed(2).replace(/\.00$/,"");
   document.getElementById("totalWalk").textContent = walkTotal;
   renderRows(ordered);
-  renderInsights(ordered);\n  renderMonthReport();
+  renderInsights(ordered);
+  renderMonthReport();
 }
 
 function filteredRecords() {
