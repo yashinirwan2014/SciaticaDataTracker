@@ -11,13 +11,13 @@ The repository also includes a browser-based version for people who want to use 
 - Allows entries to be viewed, updated or deleted.
 - Shows totals and averages based on the saved entries.
 - The website includes a recent-entry view, monthly reports, date filters, sorting, printable summaries, search, CSV export and CSV import.
-- The website also includes educational sciatica information, original simplified illustrations, a non-diagnostic symptom-observation checklist and urgent warning signs that explain when to seek medical help.
+- The website also includes a study planner for subject/topic sessions, planned versus actual study minutes, and multiple doctor-advised exercise records per day (name, advised duration, repetitions/sets where applicable, timing and actual time logged). These fields are entered by the user from their clinician’s instructions; the site does not prescribe exercises.\n- The website includes educational sciatica information, original simplified illustrations, a non-diagnostic symptom-observation checklist and urgent warning signs that explain when to seek medical help.
 
 ## Two ways to use the tracker
 
 ### 1. Browser version
 
-Open the [Sciatica Data Tracker website](https://yashinirwan2014.github.io/SciaticaDataTracker/). You can add, edit, delete and search daily entries, view summaries, and export or import a CSV backup.
+Open the [Sciatica Data Tracker website](https://yashinirwan2014.github.io/SciaticaDataTracker/). You can add, edit, delete and search daily entries, plan subject-wise study sessions, record multiple doctor-advised exercises per day, view summaries, and export or import a CSV backup. Planner details are included in new CSV backups; older CSV backups without planner columns remain importable.
 
 **Privacy and storage:** the website saves data in the browser's local storage on the current device. It does not send entries to a server and does not require an account. Data is not automatically shared or synchronised between devices. Clearing browser data can remove saved entries, so export a CSV backup regularly. CSV backups are not encrypted; keep them somewhere private.
 
@@ -102,7 +102,7 @@ The MySQL integration test runs when a test database is configured. GitHub Actio
 
 - This is a learning application and a personal record-keeping tool, not a medical device. Its symptom checklist is educational only: it cannot diagnose or rule out sciatica. The website advises prompt medical assessment for new or worsening symptoms and emergency care for warning signs.
 - The averages and totals only describe the records entered. They do not prove that study time or walking breaks cause changes in pain.
-- One entry per date is supported. Multiple sessions on the same date are not modelled.
+- The Python–MySQL version supports one daily record per date. The browser version additionally stores multiple subject-wise study sessions and multiple exercise records within that date’s entry.
 - The Python version expects MySQL to be installed and running locally.
 - Do not commit real personal health entries, passwords or other private information to this public repository.
 - The browser version keeps data on the current device only. Export a CSV backup before clearing browser data or changing devices.
