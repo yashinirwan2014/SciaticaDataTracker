@@ -11,13 +11,14 @@ The repository also includes a browser-based version for people who want to use 
 - Allows entries to be viewed, updated or deleted.
 - Shows totals and averages based on the saved entries.
 - The website includes a recent-entry view, monthly reports, date filters, sorting, printable summaries, search, CSV export and CSV import.
-- The website also includes a study planner for subject/topic sessions, planned versus actual study minutes, and multiple doctor-advised exercise records per day (name, advised duration, repetitions/sets where applicable, timing and actual time logged). These fields are entered by the user from their clinician’s instructions; the site does not prescribe exercises.\n- The website includes educational sciatica information, original simplified illustrations, a non-diagnostic symptom-observation checklist and urgent warning signs that explain when to seek medical help.
+- The website also includes a study planner for subject/topic sessions, planned versus actual study minutes, and multiple doctor-advised exercise records per day (name, advised duration, repetitions/sets where applicable, timing and actual time logged). These fields are entered by the user from their clinician’s instructions; the site does not prescribe exercises.
+- The website includes educational sciatica information, original simplified illustrations, a non-diagnostic symptom-observation checklist and urgent warning signs that explain when to seek medical help.
 
-## Two ways to use the tracker
+## Student and adult views\n\nThe browser website has two selectable views. The student view includes subject-wise study planning alongside daily activity and movement records. The adult view focuses on daily wellbeing, symptoms and activity, with the same doctor-advised movement record. Switching views does not create a separate account or alter saved entries. Both views use the same local browser data.\n\nThe website deliberately does not provide medication schedules, dose reminders, prescription-image verification or AI-generated medication advice. Medication decisions and side-effect questions should be discussed with a doctor or pharmacist; the website is not a medication-management tool.\n\n## Two ways to use the tracker
 
 ### 1. Browser version
 
-Open the [Sciatica Data Tracker website](https://yashinirwan2014.github.io/SciaticaDataTracker/). You can add, edit, delete and search daily entries, plan subject-wise study sessions, record multiple doctor-advised exercises per day, view summaries, and export or import a CSV backup. Planner details are included in new CSV backups; older CSV backups without planner columns remain importable.
+Open the [Sciatica Data Tracker website](https://yashinirwan2014.github.io/SciaticaDataTracker/). You can switch between student and adult views, add, edit, delete and search daily entries, plan subject-wise study sessions in the student view, record multiple doctor-advised exercises per day in either view, view summaries, and export or import a CSV backup. Planner details are included in new CSV backups; older CSV backups without planner columns remain importable.
 
 **Privacy and storage:** the website saves data in the browser's local storage on the current device. It does not send entries to a server and does not require an account. Data is not automatically shared or synchronised between devices. Clearing browser data can remove saved entries, so export a CSV backup regularly. CSV backups are not encrypted; keep them somewhere private.
 
