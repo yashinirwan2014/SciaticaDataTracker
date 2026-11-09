@@ -1,6 +1,6 @@
 # Sciatica Data Tracker
 
-A small Python–MySQL project for recording a few details each day: pain rating, study time and walking breaks. I built it as a CBSE Class 12 Informatics Practices project, so the program uses a simple text menu and SQL statements rather than a web framework.
+A small Python and MySQL project for recording a few details each day: pain rating, study time and walking breaks. I built it as a CBSE Class 12 Informatics Practices project, so the program uses a simple text menu and SQL statements rather than a web framework.
 
 The idea is to keep these entries together and make it possible to review them later. It is intentionally a basic tracker, not a medical or productivity scoring system.
 
