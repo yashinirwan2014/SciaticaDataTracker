@@ -1,82 +1,262 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#090909">
-  <meta name="description" content="A simple Python and MySQL project for keeping a daily record of pain levels, study time and walking breaks. Built with CBSE Class 12 Informatics Practices concepts.">
-  <title>Sciatica Data Tracker</title>
-  <style>
-    :root{color-scheme:dark;--bg:#090909;--panel:#111;--line:#292929;--muted:#a4a4a4;--white:#f4f2ed;--accent:#d5b47a;--max:1080px}
-    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--white);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.65}
-    a{color:inherit}.wrap{width:min(var(--max),calc(100% - 44px));margin:auto}.topbar{height:76px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
-    .brand{font-size:13px;letter-spacing:.16em;text-transform:uppercase;font-weight:650}.brand span{color:var(--accent)}nav{display:flex;gap:26px}nav a{font-size:13px;color:#c5c5c5;text-decoration:none}nav a:hover{color:white}
-    .hero{padding:112px 0 94px;max-width:820px}.eyebrow{color:var(--accent);font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:700}
-    h1{font-size:clamp(48px,8vw,88px);line-height:.99;letter-spacing:-.065em;font-weight:570;margin:22px 0 26px}.hero p{font-size:18px;line-height:1.75;color:#bdbdbd;max-width:650px;margin:0}
-    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}.btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 18px;border:1px solid #dedbd4;text-decoration:none;font-size:13px;font-weight:650;transition:.2s}.btn.primary{background:var(--white);color:#101010}.btn:hover{transform:translateY(-2px)}.btn.secondary{border-color:#444;color:#eee}
-    .rule{height:1px;background:var(--line)}.section{padding:76px 0}.section-head{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:30px}.kicker{color:var(--accent);font-size:11px;letter-spacing:.17em;text-transform:uppercase}.section h2{font-size:clamp(30px,4vw,44px);line-height:1.12;letter-spacing:-.04em;font-weight:550;margin:10px 0 0}.section-intro{max-width:390px;color:var(--muted);font-size:14px}
-    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.card{background:var(--panel);border:1px solid var(--line);padding:25px;min-height:190px}.num{font-size:12px;color:var(--accent);letter-spacing:.12em}.card h3{font-size:18px;font-weight:570;margin:28px 0 8px}.card p{font-size:13px;color:var(--muted);margin:0;line-height:1.7}
-    .split{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:start}.copy{color:#b9b9b9;font-size:15px;max-width:520px}.list{border-top:1px solid var(--line)}.item{padding:17px 0;border-bottom:1px solid var(--line);display:flex;gap:18px;font-size:14px}.item b{font-weight:550}.item span{color:var(--muted)}
-    .note{border:1px solid var(--line);padding:24px 26px;background:#0e0e0e;color:#b8b8b8;font-size:13px}.note strong{color:#f0eee8;font-weight:600}
-    footer{border-top:1px solid var(--line);padding:28px 0 40px;color:#858585;font-size:12px;display:flex;justify-content:space-between;gap:20px}footer a{color:#ddd;text-decoration:none}
-    @media(max-width:700px){.wrap{width:min(100% - 32px,var(--max))}.topbar{height:66px}nav{gap:14px}nav a{font-size:12px}.hero{padding:82px 0 70px}.hero p{font-size:16px}.section{padding:58px 0}.section-head,.split{display:block}.section-intro{margin-top:18px}.cards{grid-template-columns:1fr}.card{min-height:0}.card h3{margin-top:18px}.split .list{margin-top:28px}footer{display:block}footer span{display:block;margin-top:8px}}
-    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090909">
+<meta name="description" content="A private, browser-based daily log for pain ratings, study hours and walking activity. Records stay on this device and can be backed up as CSV.">
+<title>Sciatica Data Tracker</title>
+<style>
+:root{color-scheme:dark;--bg:#090909;--panel:#121212;--panel2:#181818;--line:#303030;--muted:#aaa;--white:#f5f4f0;--accent:#d8b77e;--red:#e08c82;--green:#a6c8a0;--max:1120px}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--white);font:15px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}button,input,textarea{font:inherit}a{color:inherit}.wrap{width:min(var(--max),calc(100% - 36px));margin:auto}
+header{border-bottom:1px solid var(--line)}.bar{min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{font-size:13px;letter-spacing:.14em;font-weight:750;text-decoration:none}.brand span{color:var(--accent)}nav{display:flex;gap:20px}nav a{font-size:13px;color:#c8c8c8;text-decoration:none}nav a:hover{color:white}
+main{padding:42px 0 70px}.intro{display:flex;align-items:end;justify-content:space-between;gap:25px;margin-bottom:28px}.eyebrow,.small-label{color:var(--accent);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700}h1{font-size:clamp(34px,5vw,52px);line-height:1.05;letter-spacing:-.045em;margin:9px 0}.intro p{max-width:570px;color:var(--muted);margin:0}.privacy{font-size:12px;color:var(--green);white-space:nowrap}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0}.stat,.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px}.stat{padding:17px}.stat span{display:block;color:var(--muted);font-size:12px}.stat strong{display:block;font-size:27px;letter-spacing:-.04em;margin-top:4px;font-weight:650}
+.columns{display:grid;grid-template-columns:minmax(280px,.85fr) minmax(0,1.5fr);gap:14px;align-items:start}.panel{padding:22px}.panel h2{font-size:19px;letter-spacing:-.02em;margin:0 0 5px}.hint{font-size:12px;color:var(--muted);margin:0 0 18px}
+label{display:block;font-size:12px;color:#d5d5d5;margin:13px 0 6px}input,textarea{width:100%;background:#090909;border:1px solid #414141;border-radius:6px;padding:11px 12px;color:var(--white);outline:none}input:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 2px #d8b77e22}textarea{min-height:82px;resize:vertical}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:17px}
+button,.button{border:1px solid #555;background:#1b1b1b;color:var(--white);padding:10px 14px;border-radius:6px;cursor:pointer;text-decoration:none;font-size:13px;font-weight:650}button.primary{background:var(--white);color:#101010;border-color:var(--white)}button:hover,.button:hover{border-color:var(--accent)}button.danger{color:#f0aaa1}button:disabled{opacity:.45;cursor:not-allowed}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:16px 0}.toolbar input{max-width:230px}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:610px}th,td{text-align:left;padding:12px 9px;border-bottom:1px solid var(--line);font-size:13px}th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.08em}td.actions-cell{white-space:nowrap}td button{padding:6px 9px;font-size:11px;margin-right:4px}
+.empty{padding:30px 12px;text-align:center;color:var(--muted);font-size:13px}.chart-list{display:grid;gap:13px;margin-top:18px}.bar-row{display:grid;grid-template-columns:100px 1fr 34px;gap:10px;align-items:center;font-size:12px}.track{height:9px;background:#292929;border-radius:20px;overflow:hidden}.fill{height:100%;background:var(--accent);border-radius:20px}
+.lower{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.notice{border:1px solid var(--line);border-radius:8px;padding:16px;color:var(--muted);font-size:12px;margin-top:18px}.notice strong{color:var(--white)}.status{min-height:20px;font-size:12px;color:var(--green);margin-top:8px}.status.error{color:var(--red)}
+footer{border-top:1px solid var(--line);padding:23px 0 35px;color:#888;font-size:12px}
+@media(max-width:800px){.columns{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.intro{display:block}.privacy{display:inline-block;margin-top:12px}.lower{grid-template-columns:1fr}}
+@media(max-width:520px){.wrap{width:calc(100% - 24px)}.bar{align-items:flex-start;padding:17px 0;display:block}nav{margin-top:12px;gap:16px}.stats{gap:8px}.stat{padding:13px}.stat strong{font-size:23px}.panel{padding:16px}.two{grid-template-columns:1fr}.toolbar input{max-width:none;width:100%}}
+</style>
 </head>
 <body>
-  <header class="wrap topbar">
-    <a class="brand" href="#" style="text-decoration:none">DAILY LOG <span> / </span> IP PROJECT</a>
-    <nav aria-label="Main navigation"><a href="#about">About</a><a href="#features">What it tracks</a><a href="#build">The build</a></nav>
-  </header>
-  <main>
-    <section class="wrap hero">
-      <div class="eyebrow">CBSE CLASS 12 · INFORMATICS PRACTICES</div>
-      <h1>A simple daily<br>record, kept<br>in one place.</h1>
-      <p>This project records a few daily details — pain rating, study hours and walking breaks — in a MySQL database. The program is written in Python and uses concepts from the CBSE Class 12 Informatics Practices syllabus.</p>
-      <div class="actions">
-        <a class="btn primary" href="https://github.com/yashinirwan2014/SciaticaDataTracker">View the project on GitHub ↗</a>
-        <a class="btn secondary" href="https://github.com/yashinirwan2014/SciaticaDataTracker#setup">Setup instructions</a>
-      </div>
-    </section>
-    <div class="rule"></div>
-    <section class="wrap section" id="about">
-      <div class="section-head">
-        <div><div class="kicker">01 / ABOUT THE PROJECT</div><h2>Why I made it.</h2></div>
-        <p class="section-intro">I wanted a project that uses Python–MySQL connectivity for something more practical than a list of sample student records.</p>
-      </div>
-      <p class="copy">The program has a text menu to add, view, update and delete a daily entry. Each date is the primary key, so the current version stores one entry per day. The summary is calculated in MySQL with COUNT, AVG and SUM.</p>
-    </section>
-    <div class="rule"></div>
-    <section class="wrap section" id="features">
-      <div class="section-head">
-        <div><div class="kicker">02 / WHAT GETS SAVED</div><h2>Four fields, plus a note.</h2></div>
-        <p class="section-intro">The fields are kept short so the database table and the Python code stay manageable for a school project.</p>
-      </div>
-      <div class="cards">
-        <article class="card"><div class="num">01 — WELLBEING</div><h3>Pain rating</h3><p>Record a daily rating from 0 to 10, alongside an optional note for context.</p></article>
-        <article class="card"><div class="num">02 — STUDY</div><h3>Study time</h3><p>Enter the number of hours spent studying on that date.</p></article>
-        <article class="card"><div class="num">03 — MOVEMENT</div><h3>Walking breaks</h3><p>Keep count of walking breaks and the total time spent walking.</p></article>
-      </div>
-    </section>
-    <div class="rule"></div>
-    <section class="wrap section" id="build">
-      <div class="split">
-        <div><div class="kicker">03 / HOW IT WORKS</div><h2>Python at the front.<br>MySQL underneath.</h2><p class="copy">There is no web framework or external analytics library. Python collects and displays the information; MySQL handles storage, updates and the summary query.</p></div>
-        <div class="list">
-          <div class="item"><b>Python</b><span>Variables, data types, loops, conditions and functions</span></div>
-          <div class="item"><b>SQL</b><span>CREATE, INSERT, SELECT, UPDATE and DELETE</span></div>
-          <div class="item"><b>Queries</b><span>WHERE, ORDER BY, AVG, SUM and COUNT</span></div>
-          <div class="item"><b>Connectivity</b><span>Python–MySQL using mysql.connector</span></div>
-        </div>
-      </div>
-    </section>
-    <div class="rule"></div>
-    <section class="wrap section">
-      <div class="kicker">PLEASE NOTE</div>
-      <h2 style="font-size:clamp(27px,4vw,38px);max-width:720px">This is not a medical tool.</h2>
-      <p class="copy">The tracker is for learning and personal record-keeping only. It cannot diagnose a condition or suggest treatment. Averages show only what has been entered; they do not establish a cause or effect. Keep private health information and database passwords out of this public repository.</p>
-    </section>
-  </main>
-  <footer class="wrap"><div>SCIATICA DATA TRACKER</div><span>Python · MySQL · CBSE Class 12 IP &nbsp; | &nbsp; <a href="https://github.com/yashinirwan2014/SciaticaDataTracker">Source on GitHub ↗</a></span></footer>
+<header><div class="wrap bar"><a class="brand" href="#">SCIATICA <span>/</span> DAILY TRACKER</a><nav aria-label="Main navigation"><a href="#entry">Add entry</a><a href="#history">History</a><a href="#insights">Summary</a></nav></div></header>
+<main class="wrap">
+<section class="intro"><div><div class="eyebrow">A small daily record</div><h1>Your log, in one place.</h1><p>Record pain ratings, study time and walking activity. Review your own entries over time without creating an account.</p></div><div class="privacy">● Saved only in this browser</div></section>
+<section class="stats" aria-label="Summary statistics">
+<div class="stat"><span>Days recorded</span><strong id="totalDays">0</strong></div><div class="stat"><span>Average pain rating</span><strong id="avgPain">—</strong></div><div class="stat"><span>Total study hours</span><strong id="totalStudy">0</strong></div><div class="stat"><span>Total walking minutes</span><strong id="totalWalk">0</strong></div>
+</section>
+<div class="columns">
+<section class="panel" id="entry"><h2 id="formTitle">Add a daily entry</h2><p class="hint">One entry per date. You can edit it later.</p>
+<form id="recordForm">
+<label for="date">Date</label><input id="date" type="date" required>
+<div class="two"><div><label for="pain">Pain rating (0–10)</label><input id="pain" type="number" min="0" max="10" step="1" required placeholder="e.g. 4"></div><div><label for="study">Study hours (0–24)</label><input id="study" type="number" min="0" max="24" step="0.25" required placeholder="e.g. 5"></div></div>
+<div class="two"><div><label for="breaks">Walking breaks</label><input id="breaks" type="number" min="0" max="100" step="1" required value="0"></div><div><label for="walking">Walking minutes</label><input id="walking" type="number" min="0" max="1440" step="1" required value="0"></div></div>
+<label for="notes">Optional note</label><textarea id="notes" maxlength="500" placeholder="Anything you want to remember about this day"></textarea>
+<div class="actions"><button class="primary" type="submit" id="saveButton">Save entry</button><button type="button" id="cancelEdit" hidden>Cancel edit</button></div><div class="status" id="formStatus" role="status" aria-live="polite"></div>
+</form></section>
+<section class="panel" id="history"><h2>Entry history</h2><p class="hint">Search by date or note. Choose Edit to change a saved entry.</p>
+<div class="toolbar"><span class="small-label" id="entryCount">0 ENTRIES</span><input id="search" type="search" placeholder="Search entries…" aria-label="Search entries"></div>
+<div class="table-wrap"><table><thead><tr><th>Date</th><th>Pain</th><th>Study</th><th>Breaks</th><th>Walk min</th><th>Actions</th></tr></thead><tbody id="recordRows"></tbody></table></div><div id="emptyState" class="empty">No entries yet. Add your first daily record.</div>
+<div class="actions"><button type="button" id="exportCsv">Export CSV</button><button type="button" id="importButton">Import CSV</button><input id="importFile" type="file" accept=".csv,text/csv" hidden></div><div class="status" id="fileStatus" role="status" aria-live="polite"></div>
+</section>
+</div>
+<div class="lower" id="insights">
+<section class="panel"><h2>Your recent pain ratings</h2><p class="hint">A simple view of the latest 7 recorded days. It describes entries only.</p><div id="painChart" class="chart-list"><div class="empty">Add entries to see your chart.</div></div></section>
+<section class="panel"><h2>Recent activity</h2><p class="hint">Totals from the latest 7 recorded days.</p><div class="chart-list" id="activitySummary"><div class="empty">Your activity summary will appear here.</div></div></section>
+</div>
+<div class="notice"><strong>Privacy:</strong> Entries are stored in this browser on this device using local storage. They are not sent to a server. Clearing browser data may erase them, so export a CSV backup regularly. CSV files are not encrypted; keep exported files somewhere private. Importing a CSV with an existing date replaces that date's entry.<br><br><strong>Health note:</strong> This is a personal record-keeping and school project tool, not a medical device. It does not diagnose conditions or recommend treatment. Discuss health concerns with a qualified healthcare professional.</div>
+</main>
+<footer><div class="wrap">SCIATICA DATA TRACKER · A CBSE CLASS 12 INFORMATICS PRACTICES PROJECT · <a href="https://github.com/yashinirwan2014/SciaticaDataTracker">View source on GitHub</a></div></footer>
+<script>
+"use strict";
+const STORAGE_KEY = "sciaticaDailyRecordsV1";
+let records = loadRecords();
+let editingDate = "";
+
+function loadRecords() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    const parsed = saved ? JSON.parse(saved) : [];
+    return Array.isArray(parsed) ? parsed.filter(isValidRecord) : [];
+  } catch (error) {
+    return [];
+  }
+}
+function isValidRecord(record) {
+  return record && /^\d{4}-\d{2}-\d{2}$/.test(record.date) &&
+    Number.isFinite(Number(record.pain)) && Number(record.pain) >= 0 && Number(record.pain) <= 10 &&
+    Number.isFinite(Number(record.study)) && Number(record.study) >= 0 && Number(record.study) <= 24 &&
+    Number.isFinite(Number(record.breaks)) && Number(record.breaks) >= 0 &&
+    Number.isFinite(Number(record.walking)) && Number(record.walking) >= 0 &&
+    typeof record.notes === "string";
+}
+function saveRecords() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+    return true;
+  } catch (error) {
+    showStatus("formStatus", "Could not save. Browser storage may be full or unavailable.", true);
+    return false;
+  }
+}
+function showStatus(id, message, isError) {
+  const element = document.getElementById(id);
+  element.textContent = message;
+  element.className = isError ? "status error" : "status";
+}
+function sortedRecords() {
+  return records.slice().sort((a,b) => b.date.localeCompare(a.date));
+}
+function render() {
+  const ordered = sortedRecords();
+  const count = ordered.length;
+  const painTotal = records.reduce((sum,item) => sum + Number(item.pain), 0);
+  const studyTotal = records.reduce((sum,item) => sum + Number(item.study), 0);
+  const walkTotal = records.reduce((sum,item) => sum + Number(item.walking), 0);
+  document.getElementById("totalDays").textContent = count;
+  document.getElementById("avgPain").textContent = count ? (painTotal / count).toFixed(1) + " / 10" : "—";
+  document.getElementById("totalStudy").textContent = studyTotal.toFixed(2).replace(/\.00$/,"");
+  document.getElementById("totalWalk").textContent = walkTotal;
+  renderRows(ordered);
+  renderInsights(ordered);
+}
+function renderRows(ordered) {
+  const query = document.getElementById("search").value.toLowerCase().trim();
+  const shown = ordered.filter(item => item.date.includes(query) || item.notes.toLowerCase().includes(query));
+  const body = document.getElementById("recordRows");
+  body.textContent = "";
+  shown.forEach(item => {
+    const row = document.createElement("tr");
+    [item.date, item.pain, item.study, item.breaks, item.walking].forEach(value => {
+      const cell = document.createElement("td");
+      cell.textContent = value;
+      row.appendChild(cell);
+    });
+    const actions = document.createElement("td");
+    actions.className = "actions-cell";
+    const edit = document.createElement("button");
+    edit.type = "button"; edit.textContent = "Edit"; edit.addEventListener("click", () => editRecord(item.date));
+    const remove = document.createElement("button");
+    remove.type = "button"; remove.textContent = "Delete"; remove.className = "danger";
+    remove.addEventListener("click", () => deleteRecord(item.date));
+    actions.append(edit, remove); row.appendChild(actions); body.appendChild(row);
+  });
+  document.getElementById("entryCount").textContent = shown.length + (shown.length === 1 ? " ENTRY" : " ENTRIES");
+  document.getElementById("emptyState").hidden = shown.length !== 0;
+  document.querySelector("#history table").hidden = shown.length === 0;
+}
+function renderInsights(ordered) {
+  const recent = ordered.slice(0,7).reverse();
+  const chart = document.getElementById("painChart");
+  const activity = document.getElementById("activitySummary");
+  chart.textContent = ""; activity.textContent = "";
+  if (!recent.length) {
+    chart.innerHTML = '<div class="empty">Add entries to see your chart.</div>';
+    activity.innerHTML = '<div class="empty">Your activity summary will appear here.</div>';
+    return;
+  }
+  recent.forEach(item => {
+    const line = document.createElement("div"); line.className = "bar-row";
+    const date = document.createElement("span"); date.textContent = item.date.slice(5);
+    const track = document.createElement("div"); track.className = "track";
+    const fill = document.createElement("div"); fill.className = "fill";
+    fill.style.width = (Number(item.pain) * 10) + "%"; track.appendChild(fill);
+    const value = document.createElement("strong"); value.textContent = item.pain;
+    line.append(date,track,value); chart.appendChild(line);
+  });
+  const totalStudy = recent.reduce((sum,item) => sum + Number(item.study),0);
+  const totalWalk = recent.reduce((sum,item) => sum + Number(item.walking),0);
+  const totalBreaks = recent.reduce((sum,item) => sum + Number(item.breaks),0);
+  [["Days included",recent.length],["Study hours",totalStudy.toFixed(2)],["Walking minutes",totalWalk],["Walking breaks",totalBreaks]].forEach(pair => {
+    const line = document.createElement("div"); line.className = "bar-row";
+    const label = document.createElement("span"); label.textContent = pair[0];
+    const track = document.createElement("div"); track.className = "track";
+    const fill = document.createElement("div"); fill.className = "fill";
+    const max = pair[0] === "Days included" ? 7 : pair[0] === "Study hours" ? 56 : pair[0] === "Walking minutes" ? 420 : 70;
+    fill.style.width = Math.min(100, Number(pair[1]) / max * 100) + "%"; track.appendChild(fill);
+    const value = document.createElement("strong"); value.textContent = pair[1];
+    line.append(label,track,value); activity.appendChild(line);
+  });
+}
+function resetForm() {
+  document.getElementById("recordForm").reset();
+  document.getElementById("date").value = new Date().toLocaleDateString("en-CA");
+  document.getElementById("breaks").value = "0";
+  document.getElementById("walking").value = "0";
+  editingDate = "";
+  document.getElementById("formTitle").textContent = "Add a daily entry";
+  document.getElementById("saveButton").textContent = "Save entry";
+  document.getElementById("cancelEdit").hidden = true;
+}
+function editRecord(date) {
+  const item = records.find(record => record.date === date);
+  if (!item) return;
+  editingDate = date;
+  ["date","pain","study","breaks","walking","notes"].forEach(key => document.getElementById(key).value = item[key]);
+  document.getElementById("formTitle").textContent = "Edit daily entry";
+  document.getElementById("saveButton").textContent = "Update entry";
+  document.getElementById("cancelEdit").hidden = false;
+  document.getElementById("entry").scrollIntoView({behavior:"smooth"});
+}
+function deleteRecord(date) {
+  if (!confirm("Delete the entry for " + date + "? This cannot be undone.")) return;
+  records = records.filter(item => item.date !== date);
+  if (saveRecords()) { render(); showStatus("fileStatus","Entry deleted.",false); }
+}
+document.getElementById("recordForm").addEventListener("submit", event => {
+  event.preventDefault();
+  const item = {
+    date:document.getElementById("date").value,
+    pain:Number(document.getElementById("pain").value),
+    study:Number(document.getElementById("study").value),
+    breaks:Number(document.getElementById("breaks").value),
+    walking:Number(document.getElementById("walking").value),
+    notes:document.getElementById("notes").value.trim()
+  };
+  if (!isValidRecord(item)) { showStatus("formStatus","Please check the date and number ranges.",true); return; }
+  const duplicate = records.some(record => record.date === item.date && record.date !== editingDate);
+  if (duplicate && !confirm("An entry already exists for this date. Replace it?")) return;
+  if (editingDate) records = records.filter(record => record.date !== editingDate);
+  records = records.filter(record => record.date !== item.date);
+  records.push(item);
+  if (saveRecords()) { render(); resetForm(); showStatus("formStatus","Entry saved in this browser.",false); }
+});
+document.getElementById("cancelEdit").addEventListener("click",resetForm);
+document.getElementById("search").addEventListener("input",() => renderRows(sortedRecords()));
+function csvCell(value) {
+  const text = String(value ?? "");
+  return '"' + text.replace(/"/g,'""') + '"';
+}
+document.getElementById("exportCsv").addEventListener("click",() => {
+  const headings = ["date","pain","study","breaks","walking","notes"];
+  const lines = [headings.join(","),...sortedRecords().map(item => headings.map(key => csvCell(item[key])).join(","))];
+  const blob = new Blob(["\uFEFF" + lines.join("\r\n")],{type:"text/csv;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a"); link.href = url; link.download = "sciatica-tracker-backup.csv"; link.click();
+  URL.revokeObjectURL(url); showStatus("fileStatus","CSV backup exported.",false);
+});
+document.getElementById("importButton").addEventListener("click",() => document.getElementById("importFile").click());
+document.getElementById("importFile").addEventListener("change",async event => {
+  const file = event.target.files[0]; if (!file) return;
+  try {
+    const text = await file.text();
+    const lines = text.replace(/^\uFEFF/,"").split(/\r?\n/).filter(line => line.trim());
+    if (lines.length < 2) throw new Error("The CSV file has no records.");
+    const parseLine = line => {
+      const cells = []; let value = ""; let quoted = false;
+      for (let i=0;i<line.length;i++) {
+        const char = line[i];
+        if (char === '"' && quoted && line[i+1] === '"') { value += '"'; i++; }
+        else if (char === '"') quoted = !quoted;
+        else if (char === "," && !quoted) { cells.push(value); value = ""; }
+        else value += char;
+      }
+      cells.push(value); return cells;
+    };
+    const headings = parseLine(lines[0]).map(value => value.trim().toLowerCase());
+    const required = ["date","pain","study","breaks","walking","notes"];
+    if (!required.every(key => headings.includes(key))) throw new Error("CSV columns must be: date, pain, study, breaks, walking, notes.");
+    const imported = lines.slice(1).map(line => {
+      const cells = parseLine(line); const item = {};
+      required.forEach(key => item[key] = cells[headings.indexOf(key)] ?? "");
+      ["pain","study","breaks","walking"].forEach(key => item[key] = Number(item[key]));
+      return item;
+    });
+    if (!imported.every(isValidRecord)) throw new Error("One or more rows contain invalid values.");
+    if (!confirm("Import " + imported.length + " entries? Existing dates will be replaced.")) return;
+    imported.forEach(item => { records = records.filter(record => record.date !== item.date); records.push(item); });
+    if (saveRecords()) { render(); showStatus("fileStatus",imported.length + " entries imported.",false); }
+  } catch (error) { showStatus("fileStatus",error.message || "Could not read this CSV file.",true); }
+  finally { event.target.value = ""; }
+});
+document.getElementById("date").value = new Date().toLocaleDateString("en-CA");
+document.getElementById("recordRows").closest("table").hidden = true;
+render();
+</script>
 </body>
 </html>
