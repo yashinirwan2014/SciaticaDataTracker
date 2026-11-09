@@ -1,6 +1,6 @@
 # Sciatica Data Tracker
 
-A small Python and MySQL project for recording a few details each day: pain rating, study time and walking breaks. I built it as a CBSE Class 12 Informatics Practices project, so the Python program uses a simple text menu and SQL statements rather than a web framework.
+A small Python and MySQL application for recording a few details each day: pain rating, study time and walking breaks. It is an application of CBSE Class 12 Informatics Practices concepts, using a simple Python text menu and SQL statements rather than a web framework.
 
 The repository also includes a browser-based version for people who want to use the tracker without installing Python or MySQL. The browser version stores its entries locally on the device.
 
@@ -60,7 +60,7 @@ The website uses basic HTML, CSS and JavaScript for its browser interface and lo
 You need Python 3.9 or later and a running MySQL Server.
 
 1. Clone or download this repository.
-2. Open the project folder in a terminal.
+2. Open the application folder in a terminal.
 3. Run `sciatica.sql` in MySQL Workbench or another MySQL client.
 4. Install the required package:
 
@@ -85,7 +85,7 @@ python -m unittest discover -s tests -v
 
 The MySQL integration test runs when a test database is configured. GitHub Actions starts a temporary MySQL service for that test when changes are pushed or a pull request is opened.
 
-## Project files
+## Application files
 
 | File | Purpose |
 | --- | --- |
@@ -99,7 +99,7 @@ The MySQL integration test runs when a test database is configured. GitHub Actio
 
 ## Things to keep in mind
 
-- This is a learning project and a personal record-keeping tool, not a medical device. It does not diagnose a condition or recommend treatment.
+- This is a learning application and a personal record-keeping tool, not a medical device. It does not diagnose a condition or recommend treatment.
 - The averages and totals only describe the records entered. They do not prove that study time or walking breaks cause changes in pain.
 - One entry per date is supported. Multiple sessions on the same date are not modelled.
 - The Python version expects MySQL to be installed and running locally.
