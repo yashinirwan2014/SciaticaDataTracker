@@ -68,11 +68,11 @@ class InputValidationTests(unittest.TestCase):
 
 
 class DatabaseTests(unittest.TestCase):
-    def run_database_method(self, method, cursor, *args):
+    def run_database_method(self, method, cursor, *args, expect_commit=True):
         connection = FakeConnection(cursor)
         with patch.object(database, "connect_database", return_value=connection):
             result = method(*args)
-        self.assertTrue(connection.committed)
+        self.assertEqual(connection.committed, expect_commit)
         self.assertTrue(connection.closed)
         self.assertTrue(cursor.closed)
         return result, cursor
@@ -87,7 +87,7 @@ class DatabaseTests(unittest.TestCase):
     def test_get_records_returns_rows(self):
         rows = [(date(2026, 11, 10), 3, 4.0, 2, 15, "")]
         cursor = FakeCursor(rows=rows)
-        result, used = self.run_database_method(database.get_records, cursor)
+        result, used = self.run_database_method(database.get_records, cursor, expect_commit=False)
         self.assertEqual(result, rows)
         self.assertIn("ORDER BY record_date DESC", used.query)
 
@@ -108,7 +108,7 @@ class DatabaseTests(unittest.TestCase):
     def test_summary_returns_aggregate_values(self):
         summary = (2, 3.5, 4.25, 6, 50)
         cursor = FakeCursor(one=summary)
-        result, used = self.run_database_method(database.get_summary, cursor)
+        result, used = self.run_database_method(database.get_summary, cursor, expect_commit=False)
         self.assertEqual(result, summary)
         self.assertIn("AVG(pain_level)", used.query)
 
