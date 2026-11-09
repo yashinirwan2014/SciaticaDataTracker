@@ -105,7 +105,3 @@ The MySQL integration test runs when a test database is configured. GitHub Actio
 - The Python version expects MySQL to be installed and running locally.
 - Do not commit real personal health entries, passwords or other private information to this public repository.
 - The browser version keeps data on the current device only. Export a CSV backup before clearing browser data or changing devices.
-
-## Website publishing
-
-The website source is `index.html`. To publish it with GitHub Pages, choose **Settings → Pages → Deploy from a branch**, then select `main` and `/(root)`.
