@@ -21,10 +21,24 @@ button,.button{border:1px solid #555;background:#1b1b1b;color:var(--white);paddi
 footer{border-top:1px solid var(--line);padding:23px 0 35px;color:#888;font-size:12px}
 @media(max-width:800px){.columns{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.intro{display:block}.privacy{display:inline-block;margin-top:12px}.lower{grid-template-columns:1fr}}
 @media(max-width:520px){.wrap{width:calc(100% - 24px)}.bar{align-items:flex-start;padding:17px 0;display:block}nav{margin-top:12px;gap:16px}.stats{gap:8px}.stat{padding:13px}.stat strong{font-size:23px}.panel{padding:16px}.two{grid-template-columns:1fr}.toolbar input{max-width:none;width:100%}}
+
+/* Additional information and report sections */
+.section-gap{margin-top:16px}.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.info-card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:22px}
+.info-card p,.info-card li{color:#c4c4c4;font-size:13px}.info-card ul{padding-left:20px}
+.anatomy-art{display:block;width:100%;max-height:250px;background:#0d0d0d;border:1px solid var(--line);border-radius:8px;margin:12px 0}
+.medical-links a{color:var(--accent);text-underline-offset:3px}
+.alert-panel{border:1px solid #8d514a;background:#211412;border-radius:9px;padding:18px;margin-top:14px}
+.alert-panel h2{color:#ffb5aa}.alert-panel p,.alert-panel li{color:#f0d5d1;font-size:13px}
+.check-list{display:grid;gap:10px;margin:14px 0}.check-item{display:flex;gap:10px;align-items:flex-start;color:#ddd;font-size:13px}.check-item input{width:auto;margin-top:4px;accent-color:var(--accent)}
+.report-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:14px}.report-cell{background:#0b0b0b;border:1px solid var(--line);border-radius:7px;padding:12px}.report-cell span{display:block;color:var(--muted);font-size:11px}.report-cell strong{font-size:20px}
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.filter-row input,.filter-row select{max-width:190px}
+@media(max-width:700px){.info-grid{grid-template-columns:1fr}.report-grid{grid-template-columns:1fr 1fr}.filter-row input,.filter-row select{max-width:none;flex:1}}
+@media print{body{background:white!important;color:#111!important}.panel,.stat,.info-card,.notice{background:white!important;color:#111!important;border-color:#ccc!important}header,footer,.actions,button,.toolbar input,.filter-row,.privacy{display:none!important}.hint,.info-card p,.info-card li,.notice{color:#333!important}.columns{display:block}.panel{break-inside:avoid}.stat strong{color:#111!important}}
 </style>
 </head>
 <body>
-<header><div class="wrap bar"><a class="brand" href="#">SCIATICA <span>/</span> DAILY TRACKER</a><nav aria-label="Main navigation"><a href="#entry">Add entry</a><a href="#history">History</a><a href="#insights">Summary</a></nav></div></header>
+<header><div class="wrap bar"><a class="brand" href="#">SCIATICA <span>/</span> DAILY TRACKER</a><nav aria-label="Main navigation"><a href="#entry">Add entry</a><a href="#history">History</a><a href="#insights">Summary</a><a href="#health-info">Sciatica info</a></nav></div></header>
 <main class="wrap">
 <section class="intro"><div><div class="eyebrow">A small daily record</div><h1>Your log, in one place.</h1><p>Record pain ratings, study time and walking activity. Review your own entries over time without creating an account.</p></div><div class="privacy">● Saved only in this browser</div></section>
 <section class="stats" aria-label="Summary statistics">
@@ -41,6 +55,11 @@ footer{border-top:1px solid var(--line);padding:23px 0 35px;color:#888;font-size
 </form></section>
 <section class="panel" id="history"><h2>Entry history</h2><p class="hint">Search by date or note. Choose Edit to change a saved entry.</p>
 <div class="toolbar"><span class="small-label" id="entryCount">0 ENTRIES</span><input id="search" type="search" placeholder="Search entries…" aria-label="Search entries"></div>
+<div class="filter-row" aria-label="Filter and sort records">
+<label class="sr-only" for="fromDate">From date</label><input id="fromDate" type="date" aria-label="Filter from date">
+<label class="sr-only" for="toDate">To date</label><input id="toDate" type="date" aria-label="Filter to date">
+<select id="sortRecords" aria-label="Sort records"><option value="newest">Newest first</option><option value="oldest">Oldest first</option><option value="pain-high">Pain: high to low</option><option value="study-high">Study: high to low</option></select>
+<button type="button" id="clearFilters">Clear filters</button></div>
 <div class="table-wrap"><table><thead><tr><th>Date</th><th>Pain</th><th>Study</th><th>Breaks</th><th>Walk min</th><th>Actions</th></tr></thead><tbody id="recordRows"></tbody></table></div><div id="emptyState" class="empty">No entries yet. Add your first daily record.</div>
 <div class="actions"><button type="button" id="exportCsv">Export CSV</button><button type="button" id="importButton">Import CSV</button><input id="importFile" type="file" accept=".csv,text/csv" hidden></div><div class="status" id="fileStatus" role="status" aria-live="polite"></div>
 </section>
@@ -49,7 +68,74 @@ footer{border-top:1px solid var(--line);padding:23px 0 35px;color:#888;font-size
 <section class="panel"><h2>Your recent pain ratings</h2><p class="hint">A simple view of the latest 7 recorded days. It describes entries only.</p><div id="painChart" class="chart-list"><div class="empty">Add entries to see your chart.</div></div></section>
 <section class="panel"><h2>Recent activity</h2><p class="hint">Totals from the latest 7 recorded days.</p><div class="chart-list" id="activitySummary"><div class="empty">Your activity summary will appear here.</div></div></section>
 </div>
-<div class="notice"><strong>Privacy:</strong> Entries are stored in this browser on this device using local storage. They are not sent to a server. Clearing browser data may erase them, so export a CSV backup regularly. CSV files are not encrypted; keep exported files somewhere private. Importing a CSV with an existing date replaces that date's entry.<br><br><strong>Health note:</strong> This is a personal record-keeping and school project tool, not a medical device. It does not diagnose conditions or recommend treatment. Discuss health concerns with a qualified healthcare professional.</div>
+
+<section class="panel section-gap" id="monthly-report">
+<h2>Monthly report</h2><p class="hint">A summary calculated from the entries saved in this browser.</p>
+<div class="filter-row"><label for="reportMonth">Choose month</label><input id="reportMonth" type="month"><button type="button" id="printReport">Print page / save as PDF</button></div>
+<div class="report-grid" id="monthStats" aria-live="polite"></div>
+<p class="hint" id="monthCaption">Choose a month to see its report.</p>
+</section>
+<section class="info-grid" id="health-info">
+<article class="info-card">
+<div class="eyebrow">Learn the basics</div><h2>What is sciatica?</h2>
+<p>Sciatica describes pain or other symptoms that travel along the sciatic nerve pathway, usually from the lower back or buttock down the back of one leg. Only a qualified healthcare professional can assess what is causing someone's symptoms.</p>
+<svg class="anatomy-art" viewBox="0 0 520 260" role="img" aria-labelledby="nerveTitle nerveDesc">
+<title id="nerveTitle">Simplified sciatic nerve pathway illustration</title><desc id="nerveDesc">A simple educational outline showing the lower spine, pelvis and a highlighted nerve pathway down one leg. It is schematic, not a diagnostic anatomy image.</desc>
+<rect width="520" height="260" fill="#0d0d0d"/><path d="M210 24 C195 48 196 74 210 92 L192 124 C170 139 158 156 163 177 L190 193 L204 247 M270 24 C285 48 284 74 270 92 L288 124 C310 139 322 156 317 177 L290 193 L276 247" fill="none" stroke="#a7a7a7" stroke-width="8" stroke-linecap="round"/>
+<path d="M240 18 L240 96 M228 31 L252 31 M226 49 L254 49 M226 67 L254 67 M228 85 L252 85" stroke="#d8b77e" stroke-width="6" stroke-linecap="round"/>
+<path d="M240 93 C222 117 208 133 209 154 C210 173 228 182 236 197 C242 212 241 232 238 250" fill="none" stroke="#e6c36f" stroke-width="7" stroke-linecap="round"/>
+<path d="M240 93 C260 117 274 133 273 154 C272 173 254 182 246 197" fill="none" stroke="#e6c36f" stroke-width="4" stroke-linecap="round" opacity=".65"/>
+<g fill="#f5f4f0" font-family="system-ui" font-size="13"><text x="292" y="45">Lower spine</text><text x="330" y="120">Pelvis (simplified)</text><text x="300" y="218">Nerve pathway</text></g>
+<g stroke="#aaa" stroke-width="1.5"><path d="M256 45 L286 45"/><path d="M287 123 L324 123"/><path d="M247 208 L294 208"/></g>
+</svg>
+<p class="hint">Original simplified educational illustration. It is not to scale and must not be used to locate an injury.</p>
+</article>
+<article class="info-card">
+<div class="eyebrow">Commonly reported symptoms</div><h2>What might people notice?</h2>
+<ul><li>Pain travelling from the lower back or buttock down one leg.</li><li>Burning, shooting or electric-like pain in the leg.</li><li>Tingling or a pins-and-needles feeling.</li><li>Numbness or weakness in part of the leg or foot.</li><li>Symptoms that may feel worse with movement, coughing or sneezing.</li></ul>
+<p>Symptoms vary. Similar symptoms can have other causes, so a symptom list cannot confirm sciatica.</p>
+</article>
+</section>
+<section class="info-card section-gap" id="symptom-guide">
+<div class="eyebrow">Educational guide · Not a diagnosis</div><h2>Check what you have noticed</h2>
+<p>This checklist is for organising observations before speaking with a healthcare professional. It does not calculate a score, identify sciatica or rule out another condition. Do not delay medical care to complete it.</p>
+<div class="check-list">
+<label class="check-item"><input type="checkbox" class="pattern-check"> Pain travels from my lower back or buttock down one leg.</label>
+<label class="check-item"><input type="checkbox" class="pattern-check"> I have tingling or pins and needles in a leg or foot.</label>
+<label class="check-item"><input type="checkbox" class="pattern-check"> I have numbness or weakness in a leg or foot.</label>
+<label class="check-item"><input type="checkbox" class="pattern-check"> Coughing, sneezing or movement seems to affect the pain.</label>
+</div>
+<div class="actions"><button type="button" class="primary" id="reviewSymptoms">Review my observations</button><button type="button" id="clearSymptoms">Clear checklist</button></div>
+<div class="status" id="symptomResult" role="status" aria-live="polite"></div>
+</section>
+<section class="alert-panel" id="urgent-help">
+<div class="eyebrow">Important safety information</div><h2>When to get urgent medical help</h2>
+<p><strong>Seek emergency medical care immediately</strong> if you have any of these warning signs, especially if they are new:</p>
+<ul>
+<li>New difficulty starting or controlling urination, inability to pass urine, or loss of bladder or bowel control.</li>
+<li>New numbness around the genitals, inner thighs, buttocks or the area that would touch a saddle.</li>
+<li>Severe or worsening weakness or numbness in both legs, or rapidly worsening leg weakness.</li>
+<li>Back or leg symptoms after a serious accident or injury.</li>
+</ul>
+<p>Do not wait for this website's checklist or a routine appointment. Tell a trusted adult and go to the nearest emergency department or contact your local emergency service. If you are unsure whether a symptom is urgent, get medical advice now.</p>
+<p><strong>Arrange a prompt doctor appointment</strong> for new, persistent, worsening or activity-limiting back or leg symptoms, even if none of the emergency warning signs are present. A clinician can assess the cause.</p>
+</section>
+<section class="info-card section-gap">
+<div class="eyebrow">Reliable reading</div><h2>Health information sources</h2>
+<ul class="medical-links">
+<li><a href="https://www.nhs.uk/conditions/sciatica/" target="_blank" rel="noopener noreferrer">NHS: Sciatica – symptoms and when to get help</a></li>
+<li><a href="https://www.mayoclinic.org/diseases-conditions/sciatica/symptoms-causes/syc-20377435" target="_blank" rel="noopener noreferrer">Mayo Clinic: Sciatica – symptoms and causes</a></li>
+<li><a href="https://www.nhsinform.scot/illnesses-and-conditions/muscle-bone-and-joints/neck-and-back-problems-and-conditions/sciatica/" target="_blank" rel="noopener noreferrer">NHS inform: Sciatica and urgent warning signs</a></li>
+</ul>
+<p class="hint">Health information reviewed for this page on 10 November 2026. It is general education, not personal medical advice.</p>
+</section>
+<section class="info-card section-gap" id="about-app">
+<div class="eyebrow">About this application</div><h2>Built with familiar concepts</h2>
+<p>This tracker is an application of CBSE Class 12 Informatics Practices concepts in its Python and MySQL version.</p>
+<ul><li><strong>Python:</strong> variables, data types, input/output, conditions, loops, functions and exception handling.</li><li><strong>MySQL:</strong> tables, primary keys, INSERT, SELECT, UPDATE, DELETE, WHERE, ORDER BY, COUNT, AVG and SUM.</li><li><strong>Data handling:</strong> recording, validating, searching, sorting and summarising information.</li></ul>
+<p>The browser page uses HTML, CSS and JavaScript for its interface and local browser storage. The browser tracker and Python–MySQL program are separate and do not synchronise.</p>
+</section>
+\n<div class="notice"><strong>Privacy:</strong> Entries are stored in this browser on this device using local storage. They are not sent to a server. Clearing browser data may erase them, so export a CSV backup regularly. CSV files are not encrypted; keep exported files somewhere private. Importing a CSV with an existing date replaces that date's entry.<br><br><strong>Health note:</strong> This is a personal record-keeping and educational tool, not a medical device. The symptom guide cannot diagnose or rule out sciatica. Seek medical assessment for symptoms and emergency care for warning signs.</div>
 </main>
 <footer><div class="wrap">SCIATICA DATA TRACKER · AN APPLICATION OF CBSE CLASS 12 INFORMATICS PRACTICES CONCEPTS · <a href="https://github.com/yashinirwan2014/SciaticaDataTracker">View source on GitHub</a></div></footer>
 <script>
@@ -103,9 +189,40 @@ function render() {
   document.getElementById("totalStudy").textContent = studyTotal.toFixed(2).replace(/\.00$/,"");
   document.getElementById("totalWalk").textContent = walkTotal;
   renderRows(ordered);
-  renderInsights(ordered);
+  renderInsights(ordered);\n  renderMonthReport();
 }
-function renderRows(ordered) {
+
+function filteredRecords() {
+  const query = document.getElementById("search").value.toLowerCase().trim();
+  const from = document.getElementById("fromDate").value;
+  const to = document.getElementById("toDate").value;
+  const mode = document.getElementById("sortRecords").value;
+  const shown = records.filter(item =>
+    (item.date.includes(query) || item.notes.toLowerCase().includes(query)) &&
+    (!from || item.date >= from) && (!to || item.date <= to)
+  );
+  shown.sort((a,b) => {
+    if (mode === "oldest") return a.date.localeCompare(b.date);
+    if (mode === "pain-high") return Number(b.pain)-Number(a.pain) || b.date.localeCompare(a.date);
+    if (mode === "study-high") return Number(b.study)-Number(a.study) || b.date.localeCompare(a.date);
+    return b.date.localeCompare(a.date);
+  });
+  return shown;
+}
+function renderMonthReport() {
+  const month = document.getElementById("reportMonth").value;
+  const selected = month ? records.filter(item => item.date.startsWith(month)) : [];
+  const count = selected.length;
+  const avg = count ? (selected.reduce((sum,item)=>sum+Number(item.pain),0)/count).toFixed(1) : "—";
+  const study = selected.reduce((sum,item)=>sum+Number(item.study),0);
+  const walking = selected.reduce((sum,item)=>sum+Number(item.walking),0);
+  document.getElementById("monthStats").innerHTML = [
+    ["Days recorded",count],["Average pain rating",avg],["Study hours",study.toFixed(2)],["Walking minutes",walking],
+    ["Walking breaks",selected.reduce((sum,item)=>sum+Number(item.breaks),0)],["Entries this month",count]
+  ].map(([label,value])=>'<div class="report-cell"><span>'+label+'</span><strong>'+value+'</strong></div>').join("");
+  document.getElementById("monthCaption").textContent = month ? (count ? "Based on "+count+" saved "+(count===1?"entry":"entries")+" for "+month+". These are records, not a medical assessment." : "No entries have been saved for "+month+".") : "Choose a month to see its report.";
+}
+\nfunction renderRows(ordered) {
   const query = document.getElementById("search").value.toLowerCase().trim();
   const shown = ordered.filter(item => item.date.includes(query) || item.notes.toLowerCase().includes(query));
   const body = document.getElementById("recordRows");
@@ -207,7 +324,26 @@ document.getElementById("recordForm").addEventListener("submit", event => {
   if (saveRecords()) { render(); resetForm(); showStatus("formStatus","Entry saved in this browser.",false); }
 });
 document.getElementById("cancelEdit").addEventListener("click",resetForm);
-document.getElementById("search").addEventListener("input",() => renderRows(sortedRecords()));
+["search","fromDate","toDate","sortRecords"].forEach(id => document.getElementById(id).addEventListener(id==="search"?"input":"change",() => renderRows(sortedRecords())));
+document.getElementById("clearFilters").addEventListener("click",() => {
+  ["search","fromDate","toDate"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("sortRecords").value="newest"; renderRows(sortedRecords());
+});
+document.getElementById("reportMonth").value = new Date().toLocaleDateString("en-CA").slice(0,7);
+document.getElementById("reportMonth").addEventListener("change",renderMonthReport);
+document.getElementById("printReport").addEventListener("click",()=>window.print());
+document.getElementById("reviewSymptoms").addEventListener("click",()=>{
+  const checked=document.querySelectorAll(".pattern-check:checked").length;
+  const result=document.getElementById("symptomResult");
+  result.textContent=checked
+    ? "You selected "+checked+" observation(s). Some overlap with symptoms people report with sciatica, but this cannot identify the cause. Please discuss them with a doctor."
+    : "No observations selected. This does not rule out a health condition. If you are concerned or symptoms continue, speak with a doctor.";
+  result.className="status";
+});
+document.getElementById("clearSymptoms").addEventListener("click",()=>{
+  document.querySelectorAll(".pattern-check").forEach(item=>item.checked=false);
+  showStatus("symptomResult","Checklist cleared. No answers are saved.",false);
+});
 function csvCell(value) {
   const text = String(value ?? "");
   return '"' + text.replace(/"/g,'""') + '"';
