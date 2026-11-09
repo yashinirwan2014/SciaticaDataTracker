@@ -65,6 +65,34 @@ footer{border-top:1px solid var(--line);padding:23px 0 35px;color:#888;font-size
 <div class="actions"><button type="button" id="exportCsv">Export CSV</button><button type="button" id="importButton">Import CSV</button><input id="importFile" type="file" accept=".csv,text/csv" hidden></div><div class="status" id="fileStatus" role="status" aria-live="polite"></div>
 </section>
 </div>
+
+<section class="panel section-gap" id="study-planner">
+<h2>Study & movement planner</h2>
+<p class="hint">Add subject-wise study sessions and record exercises exactly as advised by your healthcare professional. This planner does not recommend exercises, repetitions or durations.</p>
+<div class="two"><div><label for="plannerDate">Planner date</label><input id="plannerDate" type="date"></div><div><label for="plannerStatusText">Daily record status</label><input id="plannerStatusText" type="text" readonly value="Select a date with a saved daily entry"></div></div>
+<div class="info-grid">
+<div class="info-card"><h2>Study session</h2>
+<label for="studySubject">Subject</label><input id="studySubject" maxlength="60" placeholder="e.g. Informatics Practices">
+<label for="studyTopic">Chapter / topic</label><input id="studyTopic" maxlength="100" placeholder="e.g. SQL aggregate functions">
+<div class="two"><div><label for="plannedMinutes">Planned minutes</label><input id="plannedMinutes" type="number" min="1" max="1440" step="1"></div><div><label for="actualMinutes">Actual minutes</label><input id="actualMinutes" type="number" min="0" max="1440" step="1"></div></div>
+<button type="button" class="primary" id="addStudySession">Add study session</button>
+<div id="studySessionList" class="chart-list"><div class="empty">No sessions recorded for this date.</div></div>
+</div>
+<div class="info-card"><h2>Doctor-advised exercise record</h2>
+<label for="exerciseName">Exercise name (as advised)</label><input id="exerciseName" maxlength="100" placeholder="Enter the name given by your clinician">
+<div class="two"><div><label for="exerciseDuration">Advised duration (minutes)</label><input id="exerciseDuration" type="number" min="0" max="1440" step="1"></div><div><label for="exerciseReps">Advised repetitions</label><input id="exerciseReps" type="number" min="0" max="1000" step="1" placeholder="If applicable"></div></div>
+<div class="two"><div><label for="exerciseSets">Advised sets</label><input id="exerciseSets" type="number" min="0" max="100" step="1" placeholder="If applicable"></div><div><label for="exerciseActual">Actual minutes</label><input id="exerciseActual" type="number" min="0" max="1440" step="1" value="0"></div></div>
+<label for="exerciseTiming">Timing / reminder (optional)</label><input id="exerciseTiming" maxlength="80" placeholder="e.g. between study blocks">
+<label for="exerciseNotes">Notes (optional)</label><input id="exerciseNotes" maxlength="160" placeholder="Only details provided by your clinician">
+<button type="button" class="primary" id="addExercise">Add advised exercise</button>
+<div id="exerciseList" class="chart-list"><div class="empty">No exercises recorded for this date.</div></div>
+</div>
+</div>
+<div class="report-grid" id="plannerSummary"></div>
+<p class="hint">To use this planner, first save a daily entry for the selected date. Study sessions and exercise records are then saved with that date and included in CSV backups.</p>
+<div class="status" id="plannerStatus" role="status" aria-live="polite"></div>
+</section>
+
 <div class="lower" id="insights">
 <section class="panel"><h2>Your recent pain ratings</h2><p class="hint">A simple view of the latest 7 recorded days. It describes entries only.</p><div id="painChart" class="chart-list"><div class="empty">Add entries to see your chart.</div></div></section>
 <section class="panel"><h2>Recent activity</h2><p class="hint">Totals from the latest 7 recorded days.</p><div class="chart-list" id="activitySummary"><div class="empty">Your activity summary will appear here.</div></div></section>
@@ -169,7 +197,7 @@ function isValidRecord(record) {
     Number.isFinite(Number(record.study)) && Number(record.study) >= 0 && Number(record.study) <= 24 &&
     Number.isFinite(Number(record.breaks)) && Number(record.breaks) >= 0 &&
     Number.isFinite(Number(record.walking)) && Number(record.walking) >= 0 &&
-    typeof record.notes === "string";
+    typeof record.notes === "string" &&\n    (record.studySessions === undefined || (Array.isArray(record.studySessions) && record.studySessions.every(x => x && typeof x.subject === "string" && typeof x.topic === "string" && Number.isFinite(x.planned) && Number.isFinite(x.actual)))) &&\n    (record.exercises === undefined || (Array.isArray(record.exercises) && record.exercises.every(x => x && typeof x.name === "string" && Number.isFinite(x.duration) && Number.isFinite(x.actual))));
 }
 function saveRecords() {
   try {
@@ -293,7 +321,64 @@ function renderInsights(ordered) {
 }
 function resetForm() {
   document.getElementById("recordForm").reset();
-  document.getElementById("date").value = new Date().toLocaleDateString("en-CA");
+  
+function plannerRecord() {
+  const date = document.getElementById("plannerDate").value;
+  return records.find(item => item.date === date);
+}
+function renderPlanner() {
+  const date = document.getElementById("plannerDate");
+  if (!date.value) date.value = document.getElementById("date").value || new Date().toLocaleDateString("en-CA");
+  const record = plannerRecord();
+  document.getElementById("plannerStatusText").value = record ? "Daily record found" : "Save a daily entry for this date first";
+  const sessions = record && Array.isArray(record.studySessions) ? record.studySessions : [];
+  const exercises = record && Array.isArray(record.exercises) ? record.exercises : [];
+  const makeList = (id, items, type) => {
+    const host = document.getElementById(id); host.textContent = "";
+    if (!items.length) { const empty = document.createElement("div"); empty.className = "empty"; empty.textContent = type === "study" ? "No sessions recorded for this date." : "No exercises recorded for this date."; host.appendChild(empty); return; }
+    items.forEach((item,index) => {
+      const line = document.createElement("div"); line.className = "notice";
+      const detail = document.createElement("div");
+      if (type === "study") detail.textContent = item.subject + " · " + item.topic + " · planned " + item.planned + " min · actual " + item.actual + " min";
+      else detail.textContent = item.name + " · advised " + item.duration + " min · reps " + (item.reps ?? "—") + " · sets " + (item.sets ?? "—") + " · actual " + item.actual + " min" + (item.timing ? " · " + item.timing : "");
+      const remove = document.createElement("button"); remove.type = "button"; remove.className = "danger"; remove.textContent = "Remove";
+      remove.addEventListener("click", () => { const current = plannerRecord(); if (!current) return; current[type === "study" ? "studySessions" : "exercises"].splice(index,1); if (saveRecords()) render(); });
+      line.append(detail,remove); host.appendChild(line);
+    });
+  };
+  makeList("studySessionList",sessions,"study"); makeList("exerciseList",exercises,"exercise");
+  const planned = sessions.reduce((sum,x)=>sum+Number(x.planned),0), actual = sessions.reduce((sum,x)=>sum+Number(x.actual),0);
+  const exerciseTime = exercises.reduce((sum,x)=>sum+Number(x.actual),0);
+  document.getElementById("plannerSummary").innerHTML = [["Study sessions",sessions.length],["Planned study",planned+" min"],["Actual study",actual+" min"],["Exercises recorded",exercises.length],["Exercise time logged",exerciseTime+" min"],["Walking breaks",record ? record.breaks : 0]].map(([label,value])=>'<div class="report-cell"><span>'+label+'</span><strong>'+value+'</strong></div>').join("");
+}
+function savePlannerItem(type,item) {
+  const record = plannerRecord();
+  if (!record) { showStatus("plannerStatus","Save a daily entry for the selected date before adding planner items.",true); return; }
+  const key = type === "study" ? "studySessions" : "exercises";
+  if (!Array.isArray(record[key])) record[key] = [];
+  record[key].push(item);
+  if (saveRecords()) { render(); showStatus("plannerStatus",type === "study" ? "Study session saved." : "Exercise record saved.",false); }
+}
+document.getElementById("plannerDate").addEventListener("change",renderPlanner);
+document.getElementById("addStudySession").addEventListener("click",() => {
+  const subject=document.getElementById("studySubject").value.trim(), topic=document.getElementById("studyTopic").value.trim();
+  const planned=Number(document.getElementById("plannedMinutes").value), actual=Number(document.getElementById("actualMinutes").value);
+  if (!subject || !topic || !Number.isInteger(planned) || planned<1 || planned>1440 || !Number.isInteger(actual) || actual<0 || actual>1440) { showStatus("plannerStatus","Enter a subject, topic and valid study times.",true); return; }
+  savePlannerItem("study",{subject,topic,planned,actual});
+  document.getElementById("studySubject").value=""; document.getElementById("studyTopic").value=""; document.getElementById("plannedMinutes").value=""; document.getElementById("actualMinutes").value="";
+});
+document.getElementById("addExercise").addEventListener("click",() => {
+  const name=document.getElementById("exerciseName").value.trim(), duration=Number(document.getElementById("exerciseDuration").value), actual=Number(document.getElementById("exerciseActual").value);
+  const reps=document.getElementById("exerciseReps").value===""?null:Number(document.getElementById("exerciseReps").value);
+  const sets=document.getElementById("exerciseSets").value===""?null:Number(document.getElementById("exerciseSets").value);
+  if (!name || !Number.isInteger(duration) || duration<0 || duration>1440 || !Number.isInteger(actual) || actual<0 || actual>1440 || (reps!==null && (!Number.isInteger(reps)||reps<0||reps>1000)) || (sets!==null && (!Number.isInteger(sets)||sets<0||sets>100))) { showStatus("plannerStatus","Enter an exercise name and valid values from your clinician's advice.",true); return; }
+  savePlannerItem("exercise",{name,duration,reps,sets,actual,timing:document.getElementById("exerciseTiming").value.trim(),notes:document.getElementById("exerciseNotes").value.trim()});
+  ["exerciseName","exerciseDuration","exerciseReps","exerciseSets","exerciseTiming","exerciseNotes"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("exerciseActual").value="0";
+}
+);
+
+document.getElementById("date").value = new Date().toLocaleDateString("en-CA");
   document.getElementById("breaks").value = "0";
   document.getElementById("walking").value = "0";
   editingDate = "";
@@ -360,7 +445,7 @@ function csvCell(value) {
   return '"' + text.replace(/"/g,'""') + '"';
 }
 document.getElementById("exportCsv").addEventListener("click",() => {
-  const headings = ["date","pain","study","breaks","walking","notes"];
+  const headings = ["date","pain","study","breaks","walking","notes","studySessions","exercises"];
   const lines = [headings.join(","),...sortedRecords().map(item => headings.map(key => csvCell(item[key])).join(","))];
   const blob = new Blob(["\uFEFF" + lines.join("\r\n")],{type:"text/csv;charset=utf-8"});
   const url = URL.createObjectURL(blob);
