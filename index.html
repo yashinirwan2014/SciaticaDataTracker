@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#090909">
   <meta name="description" content="A simple Python and MySQL project for keeping a daily record of pain levels, study time and walking breaks. Built with CBSE Class 12 Informatics Practices concepts.">
-  <title>Daily Log — Sciatica Data Tracker</title>
+  <title>Sciatica Data Tracker</title>
   <style>
     :root{color-scheme:dark;--bg:#090909;--panel:#111;--line:#292929;--muted:#a4a4a4;--white:#f4f2ed;--accent:#d5b47a;--max:1080px}
     *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--white);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.65}
@@ -30,9 +30,9 @@
   </header>
   <main>
     <section class="wrap hero">
-      <div class="eyebrow">A small project about everyday patterns</div>
-      <h1>Make a little<br>more sense of<br>your day.</h1>
-      <p>A straightforward daily tracker for recording pain levels, study time and walking breaks. Built with Python and MySQL as a CBSE Class 12 Informatics Practices project.</p>
+      <div class="eyebrow">CBSE CLASS 12 · INFORMATICS PRACTICES</div>
+      <h1>A simple daily<br>record, kept<br>in one place.</h1>
+      <p>This project records a few daily details — pain rating, study hours and walking breaks — in a MySQL database. The program is written in Python and uses concepts from the CBSE Class 12 Informatics Practices syllabus.</p>
       <div class="actions">
         <a class="btn primary" href="https://github.com/yashinirwan2014/SciaticaDataTracker">View the project on GitHub ↗</a>
         <a class="btn secondary" href="https://github.com/yashinirwan2014/SciaticaDataTracker#setup">Setup instructions</a>
@@ -41,16 +41,16 @@
     <div class="rule"></div>
     <section class="wrap section" id="about">
       <div class="section-head">
-        <div><div class="kicker">01 / The idea</div><h2>One entry at a time.</h2></div>
-        <p class="section-intro">The aim is simple: keep daily notes in one organised place, then look back at the information without making assumptions about it.</p>
+        <div><div class="kicker">01 / ABOUT THE PROJECT</div><h2>Why I made it.</h2></div>
+        <p class="section-intro">I wanted a project that uses Python–MySQL connectivity for something more practical than a list of sample student records.</p>
       </div>
-      <p class="copy">Each record brings together a date, a pain rating, study hours and walking-break details. You can add a note, revisit an earlier date, or remove an entry. The program stores the information in a MySQL table rather than leaving it scattered across separate notes.</p>
+      <p class="copy">The program has a text menu to add, view, update and delete a daily entry. Each date is the primary key, so the current version stores one entry per day. The summary is calculated in MySQL with COUNT, AVG and SUM.</p>
     </section>
     <div class="rule"></div>
     <section class="wrap section" id="features">
       <div class="section-head">
-        <div><div class="kicker">02 / The daily record</div><h2>Just the useful details.</h2></div>
-        <p class="section-intro">A deliberately small set of fields keeps the project easy to understand and use.</p>
+        <div><div class="kicker">02 / WHAT GETS SAVED</div><h2>Four fields, plus a note.</h2></div>
+        <p class="section-intro">The fields are kept short so the database table and the Python code stay manageable for a school project.</p>
       </div>
       <div class="cards">
         <article class="card"><div class="num">01 — WELLBEING</div><h3>Pain rating</h3><p>Record a daily rating from 0 to 10, alongside an optional note for context.</p></article>
@@ -61,7 +61,7 @@
     <div class="rule"></div>
     <section class="wrap section" id="build">
       <div class="split">
-        <div><div class="kicker">03 / Under the hood</div><h2>Classroom concepts,<br>put to work.</h2><p class="copy">The project stays close to the CBSE Class 12 Informatics Practices syllabus. Python handles the menu and input, while MySQL stores the records and calculates basic summaries.</p></div>
+        <div><div class="kicker">03 / HOW IT WORKS</div><h2>Python at the front.<br>MySQL underneath.</h2><p class="copy">There is no web framework or external analytics library. Python collects and displays the information; MySQL handles storage, updates and the summary query.</p></div>
         <div class="list">
           <div class="item"><b>Python</b><span>Variables, data types, loops, conditions and functions</span></div>
           <div class="item"><b>SQL</b><span>CREATE, INSERT, SELECT, UPDATE and DELETE</span></div>
@@ -72,9 +72,9 @@
     </section>
     <div class="rule"></div>
     <section class="wrap section">
-      <div class="kicker">A note on use</div>
-      <h2 style="font-size:clamp(27px,4vw,38px);max-width:720px">A record is not a diagnosis.</h2>
-      <p class="copy">This is an educational record-keeping project, not a medical device. Its summaries describe only the entries saved by the user. They cannot diagnose a condition, recommend treatment, or establish that study time or walking breaks cause a change in pain. Please keep personal health records and database passwords private rather than committing them to a public repository.</p>
+      <div class="kicker">PLEASE NOTE</div>
+      <h2 style="font-size:clamp(27px,4vw,38px);max-width:720px">This is not a medical tool.</h2>
+      <p class="copy">The tracker is for learning and personal record-keeping only. It cannot diagnose a condition or suggest treatment. Averages show only what has been entered; they do not establish a cause or effect. Keep private health information and database passwords out of this public repository.</p>
     </section>
   </main>
   <footer class="wrap"><div>SCIATICA DATA TRACKER</div><span>Python · MySQL · CBSE Class 12 IP &nbsp; | &nbsp; <a href="https://github.com/yashinirwan2014/SciaticaDataTracker">Source on GitHub ↗</a></span></footer>
