@@ -78,14 +78,14 @@ footer{border-top:1px solid var(--line);padding:23px 0 35px;color:#888;font-size
 <p class="hint">Add subject-wise study sessions and record exercises exactly as advised by your healthcare professional. This planner does not recommend exercises, repetitions or durations.</p>
 <div class="two"><div><label for="plannerDate">Planner date</label><input id="plannerDate" type="date"></div><div><label for="plannerStatusText">Daily record status</label><input id="plannerStatusText" type="text" readonly value="Select a date with a saved daily entry"></div></div>
 <div class="info-grid">
-<div class="info-card"><h2>Study session</h2>
+<div class="info-card" id="study-session-card"><h2>Study session</h2>
 <label for="studySubject">Subject</label><input id="studySubject" maxlength="60" placeholder="e.g. Informatics Practices">
 <label for="studyTopic">Chapter / topic</label><input id="studyTopic" maxlength="100" placeholder="e.g. SQL aggregate functions">
 <div class="two"><div><label for="plannedMinutes">Planned minutes</label><input id="plannedMinutes" type="number" min="1" max="1440" step="1"></div><div><label for="actualMinutes">Actual minutes</label><input id="actualMinutes" type="number" min="0" max="1440" step="1"></div></div>
 <button type="button" class="primary" id="addStudySession">Add study session</button>
 <div id="studySessionList" class="chart-list"><div class="empty">No sessions recorded for this date.</div></div>
 </div>
-<div class="info-card"><h2>Doctor-advised exercise record</h2>
+<div class="info-card" id="exercise-card"><h2>Doctor-advised exercise record</h2>
 <label for="exerciseName">Exercise name (as advised)</label><input id="exerciseName" maxlength="100" placeholder="Enter the name given by your clinician">
 <div class="two"><div><label for="exerciseDuration">Advised duration (minutes)</label><input id="exerciseDuration" type="number" min="0" max="1440" step="1"></div><div><label for="exerciseReps">Advised repetitions</label><input id="exerciseReps" type="number" min="0" max="1000" step="1" placeholder="If applicable"></div></div>
 <div class="two"><div><label for="exerciseSets">Advised sets</label><input id="exerciseSets" type="number" min="0" max="100" step="1" placeholder="If applicable"></div><div><label for="exerciseActual">Actual minutes</label><input id="exerciseActual" type="number" min="0" max="1440" step="1" value="0"></div></div>
@@ -487,6 +487,7 @@ document.getElementById("importFile").addEventListener("change",async event => {
       const cells = parseLine(line); const item = {};
       required.forEach(key => item[key] = cells[headings.indexOf(key)] ?? "");
       ["pain","study","breaks","walking"].forEach(key => item[key] = Number(item[key]));
+      ["studySessions","exercises"].forEach(key => { const index=headings.indexOf(key); item[key]=index>=0 && cells[index] ? JSON.parse(cells[index]) : []; });
       return item;
     });
     if (!imported.every(isValidRecord)) throw new Error("One or more rows contain invalid values.");
