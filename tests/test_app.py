@@ -68,11 +68,13 @@ class InputValidationTests(unittest.TestCase):
 
 
 class DatabaseTests(unittest.TestCase):
-    def run_database_method(self, method, cursor, *args, expect_commit=True):
+    def run_database_method(self, method, cursor, *args, expect_commit=None):
+        """Run a database method and optionally check its transaction behaviour."""
         connection = FakeConnection(cursor)
         with patch.object(database, "connect_database", return_value=connection):
             result = method(*args)
-        self.assertEqual(connection.committed, expect_commit)
+        if expect_commit is not None:
+            self.assertEqual(connection.committed, expect_commit)
         self.assertTrue(connection.closed)
         self.assertTrue(cursor.closed)
         return result, cursor
@@ -80,7 +82,7 @@ class DatabaseTests(unittest.TestCase):
     def test_add_record_uses_parameterized_insert(self):
         cursor = FakeCursor()
         values = (date(2026, 11, 10), 4, 5.5, 2, 20, "note")
-        _, used = self.run_database_method(database.add_record, cursor, values)
+        _, used = self.run_database_method(database.add_record, cursor, values, expect_commit=True)
         self.assertIn("INSERT INTO daily_records", used.query)
         self.assertEqual(used.params, values)
 
@@ -94,14 +96,15 @@ class DatabaseTests(unittest.TestCase):
     def test_update_record_returns_affected_count(self):
         cursor = FakeCursor(rowcount=1)
         values = (5, 4.0, 2, 15, "updated", date(2026, 11, 10))
-        result, used = self.run_database_method(database.update_record, cursor, values)
+        result, used = self.run_database_method(database.update_record, cursor, values, expect_commit=True)
         self.assertEqual(result, 1)
         self.assertEqual(used.params, values)
 
     def test_delete_record_returns_affected_count(self):
         cursor = FakeCursor(rowcount=1)
         result, used = self.run_database_method(
-            database.delete_record, cursor, date(2026, 11, 10))
+            database.delete_record, cursor, date(2026, 11, 10),
+            expect_commit=True)
         self.assertEqual(result, 1)
         self.assertEqual(used.params, (date(2026, 11, 10),))
 
