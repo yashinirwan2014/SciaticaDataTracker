@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090909">
+  <meta name="description" content="A simple Python and MySQL project for keeping a daily record of pain levels, study time and walking breaks. Built with CBSE Class 12 Informatics Practices concepts.">
+  <title>Daily Log — Sciatica Data Tracker</title>
+  <style>
+    :root{color-scheme:dark;--bg:#090909;--panel:#111;--line:#292929;--muted:#a4a4a4;--white:#f4f2ed;--accent:#d5b47a;--max:1080px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--white);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.65}
+    a{color:inherit}.wrap{width:min(var(--max),calc(100% - 44px));margin:auto}.topbar{height:76px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+    .brand{font-size:13px;letter-spacing:.16em;text-transform:uppercase;font-weight:650}.brand span{color:var(--accent)}nav{display:flex;gap:26px}nav a{font-size:13px;color:#c5c5c5;text-decoration:none}nav a:hover{color:white}
+    .hero{padding:112px 0 94px;max-width:820px}.eyebrow{color:var(--accent);font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:700}
+    h1{font-size:clamp(48px,8vw,88px);line-height:.99;letter-spacing:-.065em;font-weight:570;margin:22px 0 26px}.hero p{font-size:18px;line-height:1.75;color:#bdbdbd;max-width:650px;margin:0}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}.btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 18px;border:1px solid #dedbd4;text-decoration:none;font-size:13px;font-weight:650;transition:.2s}.btn.primary{background:var(--white);color:#101010}.btn:hover{transform:translateY(-2px)}.btn.secondary{border-color:#444;color:#eee}
+    .rule{height:1px;background:var(--line)}.section{padding:76px 0}.section-head{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:30px}.kicker{color:var(--accent);font-size:11px;letter-spacing:.17em;text-transform:uppercase}.section h2{font-size:clamp(30px,4vw,44px);line-height:1.12;letter-spacing:-.04em;font-weight:550;margin:10px 0 0}.section-intro{max-width:390px;color:var(--muted);font-size:14px}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.card{background:var(--panel);border:1px solid var(--line);padding:25px;min-height:190px}.num{font-size:12px;color:var(--accent);letter-spacing:.12em}.card h3{font-size:18px;font-weight:570;margin:28px 0 8px}.card p{font-size:13px;color:var(--muted);margin:0;line-height:1.7}
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:start}.copy{color:#b9b9b9;font-size:15px;max-width:520px}.list{border-top:1px solid var(--line)}.item{padding:17px 0;border-bottom:1px solid var(--line);display:flex;gap:18px;font-size:14px}.item b{font-weight:550}.item span{color:var(--muted)}
+    .note{border:1px solid var(--line);padding:24px 26px;background:#0e0e0e;color:#b8b8b8;font-size:13px}.note strong{color:#f0eee8;font-weight:600}
+    footer{border-top:1px solid var(--line);padding:28px 0 40px;color:#858585;font-size:12px;display:flex;justify-content:space-between;gap:20px}footer a{color:#ddd;text-decoration:none}
+    @media(max-width:700px){.wrap{width:min(100% - 32px,var(--max))}.topbar{height:66px}nav{gap:14px}nav a{font-size:12px}.hero{padding:82px 0 70px}.hero p{font-size:16px}.section{padding:58px 0}.section-head,.split{display:block}.section-intro{margin-top:18px}.cards{grid-template-columns:1fr}.card{min-height:0}.card h3{margin-top:18px}.split .list{margin-top:28px}footer{display:block}footer span{display:block;margin-top:8px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
+  </style>
+</head>
+<body>
+  <header class="wrap topbar">
+    <a class="brand" href="#" style="text-decoration:none">DAILY LOG <span> / </span> IP PROJECT</a>
+    <nav aria-label="Main navigation"><a href="#about">About</a><a href="#features">What it tracks</a><a href="#build">The build</a></nav>
+  </header>
+  <main>
+    <section class="wrap hero">
+      <div class="eyebrow">A small project about everyday patterns</div>
+      <h1>Make a little<br>more sense of<br>your day.</h1>
+      <p>A straightforward daily tracker for recording pain levels, study time and walking breaks. Built with Python and MySQL as a CBSE Class 12 Informatics Practices project.</p>
+      <div class="actions">
+        <a class="btn primary" href="https://github.com/yashinirwan2014/SciaticaDataTracker">View the project on GitHub ↗</a>
+        <a class="btn secondary" href="https://github.com/yashinirwan2014/SciaticaDataTracker#setup">Setup instructions</a>
+      </div>
+    </section>
+    <div class="rule"></div>
+    <section class="wrap section" id="about">
+      <div class="section-head">
+        <div><div class="kicker">01 / The idea</div><h2>One entry at a time.</h2></div>
+        <p class="section-intro">The aim is simple: keep daily notes in one organised place, then look back at the information without making assumptions about it.</p>
+      </div>
+      <p class="copy">Each record brings together a date, a pain rating, study hours and walking-break details. You can add a note, revisit an earlier date, or remove an entry. The program stores the information in a MySQL table rather than leaving it scattered across separate notes.</p>
+    </section>
+    <div class="rule"></div>
+    <section class="wrap section" id="features">
+      <div class="section-head">
+        <div><div class="kicker">02 / The daily record</div><h2>Just the useful details.</h2></div>
+        <p class="section-intro">A deliberately small set of fields keeps the project easy to understand and use.</p>
+      </div>
+      <div class="cards">
+        <article class="card"><div class="num">01 — WELLBEING</div><h3>Pain rating</h3><p>Record a daily rating from 0 to 10, alongside an optional note for context.</p></article>
+        <article class="card"><div class="num">02 — STUDY</div><h3>Study time</h3><p>Enter the number of hours spent studying on that date.</p></article>
+        <article class="card"><div class="num">03 — MOVEMENT</div><h3>Walking breaks</h3><p>Keep count of walking breaks and the total time spent walking.</p></article>
+      </div>
+    </section>
+    <div class="rule"></div>
+    <section class="wrap section" id="build">
+      <div class="split">
+        <div><div class="kicker">03 / Under the hood</div><h2>Classroom concepts,<br>put to work.</h2><p class="copy">The project stays close to the CBSE Class 12 Informatics Practices syllabus. Python handles the menu and input, while MySQL stores the records and calculates basic summaries.</p></div>
+        <div class="list">
+          <div class="item"><b>Python</b><span>Variables, data types, loops, conditions and functions</span></div>
+          <div class="item"><b>SQL</b><span>CREATE, INSERT, SELECT, UPDATE and DELETE</span></div>
+          <div class="item"><b>Queries</b><span>WHERE, ORDER BY, AVG, SUM and COUNT</span></div>
+          <div class="item"><b>Connectivity</b><span>Python–MySQL using mysql.connector</span></div>
+        </div>
+      </div>
+    </section>
+    <div class="rule"></div>
+    <section class="wrap section">
+      <div class="kicker">A note on use</div>
+      <h2 style="font-size:clamp(27px,4vw,38px);max-width:720px">A record is not a diagnosis.</h2>
+      <p class="copy">This is an educational record-keeping project, not a medical device. Its summaries describe only the entries saved by the user. They cannot diagnose a condition, recommend treatment, or establish that study time or walking breaks cause a change in pain. Please keep personal health records and database passwords private rather than committing them to a public repository.</p>
+    </section>
+  </main>
+  <footer class="wrap"><div>SCIATICA DATA TRACKER</div><span>Python · MySQL · CBSE Class 12 IP &nbsp; | &nbsp; <a href="https://github.com/yashinirwan2014/SciaticaDataTracker">Source on GitHub ↗</a></span></footer>
+</body>
+</html>
