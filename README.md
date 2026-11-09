@@ -1,19 +1,28 @@
 # Sciatica Data Tracker
 
-A small Python and MySQL project for recording a few details each day: pain rating, study time and walking breaks. I built it as a CBSE Class 12 Informatics Practices project, so the program uses a simple text menu and SQL statements rather than a web framework.
+A small Python and MySQL project for recording a few details each day: pain rating, study time and walking breaks. I built it as a CBSE Class 12 Informatics Practices project, so the Python program uses a simple text menu and SQL statements rather than a web framework.
 
-The idea is to keep these entries together and make it possible to review them later. It is intentionally a basic tracker, not a medical or productivity scoring system.
+The repository also includes a browser-based version for people who want to use the tracker without installing Python or MySQL. The browser version stores its entries locally on the device.
 
 ## What it does
 
 - Saves one entry per date.
 - Records a pain rating from 0 to 10, study hours, walking-break count and total walking minutes.
 - Allows entries to be viewed, updated or deleted.
-- Shows a short summary using SQL aggregate functions.
+- Shows totals and averages based on the saved entries.
+- The website includes a recent-entry view, simple visual summaries, search, CSV export and CSV import.
 
-## A quick look at the project
+## Two ways to use the tracker
 
-The program starts with a numbered menu:
+### 1. Browser version
+
+Open the [Sciatica Data Tracker website](https://yashinirwan2014.github.io/SciaticaDataTracker/). You can add, edit, delete and search daily entries, view summaries, and export or import a CSV backup.
+
+**Privacy and storage:** the website saves data in the browser's local storage on the current device. It does not send entries to a server and does not require an account. Data is not automatically shared or synchronised between devices. Clearing browser data can remove saved entries, so export a CSV backup regularly. CSV backups are not encrypted; keep them somewhere private.
+
+### 2. Python and MySQL version
+
+The Python program starts with a numbered menu:
 
 ```text
 === SCIATICA DATA TRACKER ===
@@ -25,7 +34,7 @@ The program starts with a numbered menu:
 0. Exit
 ```
 
-Each date can have one record because `record_date` is the table's primary key.
+Each date can have one record because `record_date` is the table's primary key. This version stores records in a MySQL database and is separate from the browser version; the two versions do not automatically exchange data.
 
 ## Technologies and syllabus concepts
 
@@ -44,7 +53,9 @@ Each date can have one record because `record_date` is the table's primary key.
 
 **Connectivity:** `mysql.connector` connects the Python program to MySQL.
 
-## Run it locally
+The website uses basic HTML, CSS and JavaScript for its browser interface and local storage. These are web technologies used for the interface; the Python–MySQL program remains the part demonstrating Python–MySQL connectivity.
+
+## Run the Python version locally
 
 You need Python 3.9 or later and a running MySQL Server.
 
@@ -84,16 +95,17 @@ The MySQL integration test runs when a test database is configured. GitHub Actio
 | `db_config.py` | Local database settings |
 | `sciatica.sql` | Creates the database and table |
 | `tests/` | Unit and MySQL integration tests |
-| `index.html` | Simple project information page |
+| `index.html` | Browser-based tracker and website |
 
 ## Things to keep in mind
 
 - This is a learning project and a personal record-keeping tool, not a medical device. It does not diagnose a condition or recommend treatment.
 - The averages and totals only describe the records entered. They do not prove that study time or walking breaks cause changes in pain.
 - One entry per date is supported. Multiple sessions on the same date are not modelled.
-- The program expects MySQL to be installed and running locally.
+- The Python version expects MySQL to be installed and running locally.
 - Do not commit real personal health entries, passwords or other private information to this public repository.
+- The browser version keeps data on the current device only. Export a CSV backup before clearing browser data or changing devices.
 
-## Website
+## Website publishing
 
-The project page is in [index.html](index.html). To publish it, choose **Settings → Pages → Deploy from a branch**, then select `main` and `/(root)`.
+The website source is `index.html`. To publish it with GitHub Pages, choose **Settings → Pages → Deploy from a branch**, then select `main` and `/(root)`.
