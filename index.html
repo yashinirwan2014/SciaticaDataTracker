@@ -386,7 +386,16 @@ document.getElementById("addExercise").addEventListener("click",() => {
 });
 function resetForm() {
   document.getElementById("recordForm").reset();
-  function setAudience(mode) {
+  document.getElementById("date").value = new Date().toLocaleDateString("en-CA");
+  document.getElementById("breaks").value = "0";
+  document.getElementById("walking").value = "0";
+  editingDate = "";
+  document.getElementById("formTitle").textContent = "Add a daily entry";
+  document.getElementById("saveButton").textContent = "Save entry";
+  document.getElementById("cancelEdit").hidden = true;
+}
+
+function setAudience(mode) {
   const student = mode === "student";
   const studySection = document.getElementById("study-planner");
   const studyCard = document.getElementById("study-session-card");
@@ -410,21 +419,12 @@ function resetForm() {
     : "Adult section selected.";
   document.getElementById("studentView").classList.toggle("primary", student);
   document.getElementById("adultView").classList.toggle("primary", !student);
-  studySection.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 document.getElementById("studentView").addEventListener("click", () => setAudience("student"));
 document.getElementById("adultView").addEventListener("click", () => setAudience("adult"));
 setAudience("student");
 
-document.getElementById("date").value = new Date().toLocaleDateString("en-CA");
-  document.getElementById("breaks").value = "0";
-  document.getElementById("walking").value = "0";
-  editingDate = "";
-  document.getElementById("formTitle").textContent = "Add a daily entry";
-  document.getElementById("saveButton").textContent = "Save entry";
-  document.getElementById("cancelEdit").hidden = true;
-}
 function editRecord(date) {
   const item = records.find(record => record.date === date);
   if (!item) return;
