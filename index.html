@@ -232,9 +232,9 @@ function renderMonthReport() {
   ].map(([label,value])=>'<div class="report-cell"><span>'+label+'</span><strong>'+value+'</strong></div>').join("");
   document.getElementById("monthCaption").textContent = month ? (count ? "Based on "+count+" saved "+(count===1?"entry":"entries")+" for "+month+". These are records, not a medical assessment." : "No entries have been saved for "+month+".") : "Choose a month to see its report.";
 }
-\nfunction renderRows(ordered) {
-  const query = document.getElementById("search").value.toLowerCase().trim();
-  const shown = ordered.filter(item => item.date.includes(query) || item.notes.toLowerCase().includes(query));
+
+function renderRows(ordered) {
+  const shown = filteredRecords();
   const body = document.getElementById("recordRows");
   body.textContent = "";
   shown.forEach(item => {
