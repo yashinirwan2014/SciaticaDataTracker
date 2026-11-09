@@ -239,6 +239,7 @@ function render() {
   renderRows(ordered);
   renderInsights(ordered);
   renderMonthReport();
+  renderPlanner();
 }
 
 function filteredRecords() {
@@ -416,7 +417,9 @@ document.getElementById("recordForm").addEventListener("submit", event => {
     study:Number(document.getElementById("study").value),
     breaks:Number(document.getElementById("breaks").value),
     walking:Number(document.getElementById("walking").value),
-    notes:document.getElementById("notes").value.trim()
+    notes:document.getElementById("notes").value.trim(),
+    studySessions:(records.find(record => record.date === editingDate || record.date === document.getElementById("date").value) || {}).studySessions || [],
+    exercises:(records.find(record => record.date === editingDate || record.date === document.getElementById("date").value) || {}).exercises || []
   };
   if (!isValidRecord(item)) { showStatus("formStatus","Please check the date and number ranges.",true); return; }
   const duplicate = records.some(record => record.date === item.date && record.date !== editingDate);
