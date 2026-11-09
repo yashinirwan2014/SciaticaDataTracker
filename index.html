@@ -386,7 +386,38 @@ document.getElementById("addExercise").addEventListener("click",() => {
 });
 function resetForm() {
   document.getElementById("recordForm").reset();
-  document.getElementById("date").value = new Date().toLocaleDateString("en-CA");
+  function setAudience(mode) {
+  const student = mode === "student";
+  const studySection = document.getElementById("study-planner");
+  const studyCard = document.getElementById("study-session-card");
+  const exerciseCard = document.getElementById("exercise-card");
+  const heading = studySection.querySelector("h2");
+  const hint = studySection.querySelector(".hint");
+
+  studySection.hidden = false;
+  studyCard.hidden = !student;
+  exerciseCard.hidden = false;
+  heading.textContent = student ? "Study & movement planner" : "Movement planner";
+  hint.textContent = student
+    ? "Plan subject-wise study sessions and record movement exactly as advised by your healthcare professional."
+    : "Review daily movement records and record exercises exactly as advised by your healthcare professional.";
+
+  document.getElementById("introDescription").textContent = student
+    ? "A study-friendly view for organising subjects, study sessions, walking breaks and clinician-advised movement notes."
+    : "A daily wellbeing view for reviewing symptoms, activity and clinician-advised movement notes.";
+  document.getElementById("audienceStatus").textContent = student
+    ? "Student section selected."
+    : "Adult section selected.";
+  document.getElementById("studentView").classList.toggle("primary", student);
+  document.getElementById("adultView").classList.toggle("primary", !student);
+  studySection.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+document.getElementById("studentView").addEventListener("click", () => setAudience("student"));
+document.getElementById("adultView").addEventListener("click", () => setAudience("adult"));
+setAudience("student");
+
+document.getElementById("date").value = new Date().toLocaleDateString("en-CA");
   document.getElementById("breaks").value = "0";
   document.getElementById("walking").value = "0";
   editingDate = "";
