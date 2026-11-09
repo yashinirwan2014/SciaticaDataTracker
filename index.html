@@ -23,6 +23,7 @@ footer{border-top:1px solid var(--line);padding:23px 0 35px;color:#888;font-size
 @media(max-width:520px){.wrap{width:calc(100% - 24px)}.bar{align-items:flex-start;padding:17px 0;display:block}nav{margin-top:12px;gap:16px}.stats{gap:8px}.stat{padding:13px}.stat strong{font-size:23px}.panel{padding:16px}.two{grid-template-columns:1fr}.toolbar input{max-width:none;width:100%}}
 
 /* Additional information and report sections */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .section-gap{margin-top:16px}.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
 .info-card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:22px}
 .info-card p,.info-card li{color:#c4c4c4;font-size:13px}.info-card ul{padding-left:20px}
@@ -92,6 +93,14 @@ footer{border-top:1px solid var(--line);padding:23px 0 35px;color:#888;font-size
 </article>
 <article class="info-card">
 <div class="eyebrow">Commonly reported symptoms</div><h2>What might people notice?</h2>
+<svg class="anatomy-art" viewBox="0 0 520 220" role="img" aria-labelledby="symptomTitle symptomDesc">
+<title id="symptomTitle">Illustration of a possible sciatica pain pathway</title><desc id="symptomDesc">A simplified back view silhouette with one highlighted pathway from the lower back through the buttock and down the back of one leg. Symptoms differ and this is not a diagnostic guide.</desc>
+<rect width="520" height="220" fill="#0d0d0d"/>
+<circle cx="245" cy="31" r="19" fill="#777"/><path d="M216 56 Q245 45 274 56 L290 111 L270 127 L264 92 L267 143 L282 207 L259 207 L245 151 L230 207 L207 207 L223 143 L220 92 L213 127 L194 111 Z" fill="#777"/>
+<path d="M244 76 Q225 97 235 118 Q247 128 253 143 L264 184" fill="none" stroke="#e6c36f" stroke-width="7" stroke-linecap="round"/>
+<g fill="#f5f4f0" font-family="system-ui" font-size="13"><text x="315" y="77">Possible route of</text><text x="315" y="95">radiating symptoms</text><text x="315" y="145" fill="#d8b77e">Illustrative only</text></g>
+<path d="M264 108 L307 82" stroke="#d8b77e" stroke-width="1.5"/>
+</svg>
 <ul><li>Pain travelling from the lower back or buttock down one leg.</li><li>Burning, shooting or electric-like pain in the leg.</li><li>Tingling or a pins-and-needles feeling.</li><li>Numbness or weakness in part of the leg or foot.</li><li>Symptoms that may feel worse with movement, coughing or sneezing.</li></ul>
 <p>Symptoms vary. Similar symptoms can have other causes, so a symptom list cannot confirm sciatica.</p>
 </article>
@@ -135,7 +144,8 @@ footer{border-top:1px solid var(--line);padding:23px 0 35px;color:#888;font-size
 <ul><li><strong>Python:</strong> variables, data types, input/output, conditions, loops, functions and exception handling.</li><li><strong>MySQL:</strong> tables, primary keys, INSERT, SELECT, UPDATE, DELETE, WHERE, ORDER BY, COUNT, AVG and SUM.</li><li><strong>Data handling:</strong> recording, validating, searching, sorting and summarising information.</li></ul>
 <p>The browser page uses HTML, CSS and JavaScript for its interface and local browser storage. The browser tracker and Python–MySQL program are separate and do not synchronise.</p>
 </section>
-\n<div class="notice"><strong>Privacy:</strong> Entries are stored in this browser on this device using local storage. They are not sent to a server. Clearing browser data may erase them, so export a CSV backup regularly. CSV files are not encrypted; keep exported files somewhere private. Importing a CSV with an existing date replaces that date's entry.<br><br><strong>Health note:</strong> This is a personal record-keeping and educational tool, not a medical device. The symptom guide cannot diagnose or rule out sciatica. Seek medical assessment for symptoms and emergency care for warning signs.</div>
+
+<div class="notice"><strong>Privacy:</strong> Entries are stored in this browser on this device using local storage. They are not sent to a server. Clearing browser data may erase them, so export a CSV backup regularly. CSV files are not encrypted; keep exported files somewhere private. Importing a CSV with an existing date replaces that date's entry.<br><br><strong>Health note:</strong> This is a personal record-keeping and educational tool, not a medical device. The symptom guide cannot diagnose or rule out sciatica. Seek medical assessment for symptoms and emergency care for warning signs.</div>
 </main>
 <footer><div class="wrap">SCIATICA DATA TRACKER · AN APPLICATION OF CBSE CLASS 12 INFORMATICS PRACTICES CONCEPTS · <a href="https://github.com/yashinirwan2014/SciaticaDataTracker">View source on GitHub</a></div></footer>
 <script>
