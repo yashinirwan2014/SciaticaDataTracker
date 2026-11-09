@@ -14,6 +14,21 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      SCIATEK_DB_PASSWORD: ci-test-password
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: ci-test-password
+          MYSQL_DATABASE: sciatica_tracker
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -pci-test-password"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -27,5 +42,29 @@ jobs:
           python -m pip install -r requirements.txt
       - name: Compile Python files
         run: python -m compileall -q main.py database.py analysis.py db_config.py tests
-      - name: Run automated tests
+      - name: Create database schema
+        run: |
+          python - <<'PY'
+          import mysql.connector
+          connection = mysql.connector.connect(
+              host="127.0.0.1", user="root",
+              password="ci-test-password"
+          )
+          cursor = connection.cursor()
+          cursor.execute("CREATE DATABASE IF NOT EXISTS sciatica_tracker")
+          cursor.execute("USE sciatica_tracker")
+          cursor.execute("""
+              CREATE TABLE IF NOT EXISTS daily_records (
+                  record_date DATE PRIMARY KEY,
+                  pain_level INT NOT NULL,
+                  study_hours DECIMAL(5,2) NOT NULL,
+                  walking_breaks INT NOT NULL,
+                  walking_minutes INT NOT NULL,
+                  notes VARCHAR(255)
+              )
+          """)
+          cursor.close()
+          connection.close()
+          PY
+      - name: Run automated and MySQL integration tests
         run: python -m unittest discover -s tests -v
