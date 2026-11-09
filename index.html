@@ -197,7 +197,9 @@ function isValidRecord(record) {
     Number.isFinite(Number(record.study)) && Number(record.study) >= 0 && Number(record.study) <= 24 &&
     Number.isFinite(Number(record.breaks)) && Number(record.breaks) >= 0 &&
     Number.isFinite(Number(record.walking)) && Number(record.walking) >= 0 &&
-    typeof record.notes === "string" &&\n    (record.studySessions === undefined || (Array.isArray(record.studySessions) && record.studySessions.every(x => x && typeof x.subject === "string" && typeof x.topic === "string" && Number.isFinite(x.planned) && Number.isFinite(x.actual)))) &&\n    (record.exercises === undefined || (Array.isArray(record.exercises) && record.exercises.every(x => x && typeof x.name === "string" && Number.isFinite(x.duration) && Number.isFinite(x.actual))));
+    typeof record.notes === "string" &&
+    (record.studySessions === undefined || (Array.isArray(record.studySessions) && record.studySessions.every(x => x && typeof x.subject === "string" && typeof x.topic === "string" && Number.isFinite(x.planned) && Number.isFinite(x.actual)))) &&
+    (record.exercises === undefined || (Array.isArray(record.exercises) && record.exercises.every(x => x && typeof x.name === "string" && Number.isFinite(x.duration) && Number.isFinite(x.actual))));
 }
 function saveRecords() {
   try {
