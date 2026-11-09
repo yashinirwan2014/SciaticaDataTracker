@@ -10,7 +10,8 @@ The repository also includes a browser-based version for people who want to use 
 - Records a pain rating from 0 to 10, study hours, walking-break count and total walking minutes.
 - Allows entries to be viewed, updated or deleted.
 - Shows totals and averages based on the saved entries.
-- The website includes a recent-entry view, simple visual summaries, search, CSV export and CSV import.
+- The website includes a recent-entry view, monthly reports, date filters, sorting, printable summaries, search, CSV export and CSV import.
+- The website also includes educational sciatica information, original simplified illustrations, a non-diagnostic symptom-observation checklist and urgent warning signs that explain when to seek medical help.
 
 ## Two ways to use the tracker
 
@@ -53,7 +54,7 @@ Each date can have one record because `record_date` is the table's primary key. 
 
 **Connectivity:** `mysql.connector` connects the Python program to MySQL.
 
-The website uses basic HTML, CSS and JavaScript for its browser interface and local storage. These are web technologies used for the interface; the Python–MySQL program remains the part demonstrating Python–MySQL connectivity.
+The website uses basic HTML, CSS and JavaScript for its browser interface, local storage, filters, reports and printable view. The health information is general education with links to NHS and Mayo Clinic sources; it is not personal medical advice. These are web technologies used for the interface; the Python–MySQL program remains the part demonstrating Python–MySQL connectivity.
 
 ## Run the Python version locally
 
@@ -99,7 +100,7 @@ The MySQL integration test runs when a test database is configured. GitHub Actio
 
 ## Things to keep in mind
 
-- This is a learning application and a personal record-keeping tool, not a medical device. It does not diagnose a condition or recommend treatment.
+- This is a learning application and a personal record-keeping tool, not a medical device. Its symptom checklist is educational only: it cannot diagnose or rule out sciatica. The website advises prompt medical assessment for new or worsening symptoms and emergency care for warning signs.
 - The averages and totals only describe the records entered. They do not prove that study time or walking breaks cause changes in pain.
 - One entry per date is supported. Multiple sessions on the same date are not modelled.
 - The Python version expects MySQL to be installed and running locally.
