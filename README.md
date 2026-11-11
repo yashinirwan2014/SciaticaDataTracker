@@ -14,7 +14,11 @@ The repository also includes a browser-based version for people who want to use 
 - The website also includes a study planner for subject/topic sessions, planned versus actual study minutes, and multiple doctor-advised exercise records per day (name, advised duration, repetitions/sets where applicable, timing and actual time logged). These fields are entered by the user from their clinician’s instructions; the site does not prescribe exercises.
 - The website includes educational sciatica information, original simplified illustrations, a non-diagnostic symptom-observation checklist and urgent warning signs that explain when to seek medical help.
 
-## Student and adult views\n\nThe browser website has two selectable views. The student view includes subject-wise study planning alongside daily activity and movement records. The adult view focuses on daily wellbeing, symptoms and activity, with the same doctor-advised movement record. Switching views does not create a separate account or alter saved entries. Both views use the same local browser data.\n\nThe website deliberately does not provide medication schedules, dose reminders, prescription-image verification or AI-generated medication advice. Medication decisions and side-effect questions should be discussed with a doctor or pharmacist; the website is not a medication-management tool.\n\n## Two ways to use the tracker
+## Student and adult views
+The browser website has two selectable views. The student view includes subject-wise study planning alongside daily activity and movement records. The adult view focuses on daily wellbeing, symptoms and activity, with the same doctor-advised movement record. Switching views does not create a separate account or alter saved entries. Both views use the same local browser data.
+The website deliberately does not provide medication schedules, dose reminders, prescription-image verification or AI-generated medication advice. Medication decisions and side-effect questions should be discussed with a doctor or pharmacist; the website is not a medication-management tool.
+
+## Two ways to use the tracker
 
 ### 1. Browser version
 
