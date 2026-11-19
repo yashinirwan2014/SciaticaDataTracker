@@ -87,7 +87,7 @@ function renderMonthReport() {
   const visibleMonthItems = document.body.dataset.audience === "adult"
     ? monthItems.filter(([label]) => label !== "Study hours")
     : monthItems;
-  document.getElementById("monthStats").innerHTML = visibleMonthItems.map(([label,value])=>'<div class="report-cell"><span>'+label+'</span><strong>'+value+'</strong></div>').join("");
+  document.getElementById("monthStats").innerHTML = visibleMonthItems.map(([label,value])=>'<div class="report-cell'+(label === "Study hours" ? " study-report-cell" : "")+'"><span>'+label+'</span><strong>'+value+'</strong></div>').join("");
   document.getElementById("monthCaption").textContent = month ? (count ? "Based on "+count+" saved "+(count===1?"entry":"entries")+" for "+month+". These are records, not a medical assessment." : "No entries have been saved for "+month+".") : "Choose a month to see its report.";
 }
 
