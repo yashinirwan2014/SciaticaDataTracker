@@ -39,3 +39,6 @@ body[data-audience="adult"] #history table td:nth-child(3) {
 }
 
 body[data-audience="adult"] #sortRecords option[value="study-high"] { display: none; }
+
+/* Extra safeguard: never show the monthly Study hours cell in Adult view. */
+body[data-audience="adult"] #monthStats .study-report-cell { display: none !important; }
