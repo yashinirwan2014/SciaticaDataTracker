@@ -1,34 +1,65 @@
 # Sciatica Data Tracker
 
-A small Python and MySQL application for recording a few details each day: pain rating, study time and walking breaks. It is an application of CBSE Class 12 Informatics Practices concepts, using a simple Python text menu and SQL statements rather than a web framework.
+Sciatica Data Tracker is a small record keeping project made with Python and MySQL. It lets a user save daily notes about pain ratings, study time and walking activity.
 
-The repository also includes a browser-based version for people who want to use the tracker without installing Python or MySQL. The browser version stores its entries locally on the device.
+The repository also has a browser version. It can be opened without installing Python or MySQL, and it saves entries in the browser on the current device.
 
-## What it does
+This is a learning project based on Python and SQL concepts from CBSE Class 12 Informatics Practices. It is not a medical device and it does not diagnose or treat any condition.
 
-- Saves one entry per date.
-- Records a pain rating from 0 to 10, study hours, walking-break count and total walking minutes.
-- Allows entries to be viewed, updated or deleted.
-- Shows totals and averages based on the saved entries.
-- The website includes a recent-entry view, monthly reports, date filters, sorting, printable summaries, search, CSV export and CSV import.
-- The website also includes a study planner for subject/topic sessions, planned versus actual study minutes, and multiple doctor-advised exercise records per day (name, advised duration, repetitions/sets where applicable, timing and actual time logged). These fields are entered by the user from their clinician’s instructions; the site does not prescribe exercises.
-- The website includes educational sciatica information, original simplified illustrations, a non-diagnostic symptom-observation checklist and urgent warning signs that explain when to seek medical help.
+## Features
+
+* Save one daily entry for each date.
+* Record a pain rating from 0 to 10, study hours, walking breaks and walking minutes.
+* View, update and delete saved entries.
+* Check totals and averages from the available records.
+* Search, sort and filter entries in the browser version.
+* View monthly reports and printable summaries.
+* Import and export CSV backups.
+* In the student view, plan subject and topic study sessions.
+* Record multiple exercises in a day when they have been advised by a healthcare professional.
+* Read general educational information about sciatica and warning signs that may need medical attention.
+
+The tracker does not prescribe exercises. Exercise details are entered by the user based on advice they have received from a qualified healthcare professional.
 
 ## Student and adult views
-The browser website has two selectable views. The student view includes subject-wise study planning alongside daily activity and movement records. The adult view focuses on daily wellbeing, symptoms and activity, with the same doctor-advised movement record. Switching views does not create a separate account or alter saved entries. Both views use the same local browser data.
-The website deliberately does not provide medication schedules, dose reminders, prescription-image verification or AI-generated medication advice. Medication decisions and side-effect questions should be discussed with a doctor or pharmacist; the website is not a medication-management tool.
 
-## Two ways to use the tracker
+The browser version has two views.
 
-### 1. Browser version
+The student view includes study planning along with daily activity records. The adult view focuses on daily wellbeing, symptoms and activity. Study related sections are hidden in the adult view.
 
-Open the [Sciatica Data Tracker website](https://yashinirwan2014.github.io/SciaticaDataTracker/). You can switch between student and adult views, add, edit, delete and search daily entries, plan subject-wise study sessions in the student view, record multiple doctor-advised exercises per day in either view, view summaries, and export or import a CSV backup. Planner details are included in new CSV backups; older CSV backups without planner columns remain importable.
+Changing the selected view does not create another account or delete saved entries. Both views use the same browser data.
 
-**Privacy and storage:** the website saves data in the browser's local storage on the current device. It does not send entries to a server and does not require an account. Data is not automatically shared or synchronised between devices. Clearing browser data can remove saved entries, so export a CSV backup regularly. CSV backups are not encrypted; keep them somewhere private.
+The project does not provide medication schedules, dose reminders or medication advice. Questions about medicines and side effects should be discussed with a doctor or pharmacist.
 
-### 2. Python and MySQL version
+## Use the browser version
 
-The Python program starts with a numbered menu:
+Open the [Sciatica Data Tracker website](https://yashinirwan2014.github.io/SciaticaDataTracker/).
+
+Entries are saved in local storage in the current browser. They are not sent to a server and are not automatically shared between devices. Clearing browser data can remove saved entries, so export a CSV backup regularly.
+
+CSV backups are not encrypted. Keep them somewhere private and do not include personal health information in public copies of this repository.
+
+## Run the Python and MySQL version
+
+You need Python 3.9 or newer and a running MySQL Server.
+
+1. Download or clone this repository.
+2. Open the project folder in a terminal.
+3. Run `sciatica.sql` using MySQL Workbench or another MySQL client.
+4. Install the required package:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+5. Set the database details in `db_config.py`. You can provide the MySQL password through the `SCIATEK_DB_PASSWORD` environment variable.
+6. Start the program:
+
+```bash
+python main.py
+```
+
+The Python program opens a numbered menu:
 
 ```text
 === SCIATICA DATA TRACKER ===
@@ -40,50 +71,11 @@ The Python program starts with a numbered menu:
 0. Exit
 ```
 
-Each date can have one record because `record_date` is the table's primary key. This version stores records in a MySQL database and is separate from the browser version; the two versions do not automatically exchange data.
-
-## Technologies and syllabus concepts
-
-**Python**
-- Variables and data types
-- Input and output
-- `if` statements and loops
-- Functions and modules
-- Basic exception handling
-
-**MySQL**
-- Creating a database and table
-- `INSERT`, `SELECT`, `UPDATE` and `DELETE`
-- `WHERE` and `ORDER BY`
-- `COUNT()`, `AVG()` and `SUM()`
-
-**Connectivity:** `mysql.connector` connects the Python program to MySQL.
-
-The website uses basic HTML, CSS and JavaScript for its browser interface, local storage, filters, reports and printable view. The health information is general education with links to NHS and Mayo Clinic sources; it is not personal medical advice. These are web technologies used for the interface; the Python–MySQL program remains the part demonstrating Python–MySQL connectivity.
-
-## Run the Python version locally
-
-You need Python 3.9 or later and a running MySQL Server.
-
-1. Clone or download this repository.
-2. Open the application folder in a terminal.
-3. Run `sciatica.sql` in MySQL Workbench or another MySQL client.
-4. Install the required package:
-
-   ```bash
-   python -m pip install -r requirements.txt
-   ```
-
-5. Set your MySQL details in `db_config.py`. The password can instead be supplied through the `SCIATEK_DB_PASSWORD` environment variable.
-6. Start the program:
-
-   ```bash
-   python main.py
-   ```
+The date is the primary key in the MySQL table, so this version stores one record per date. The browser version and Python version keep their data separately and do not automatically exchange records.
 
 ## Run the tests
 
-The unit tests use mocked database connections, so they do not need a local MySQL server:
+The unit tests use mocked database connections, so they do not need a local MySQL server.
 
 ```bash
 python -m unittest discover -s tests -v
@@ -91,23 +83,47 @@ python -m unittest discover -s tests -v
 
 The MySQL integration test runs when a test database is configured. GitHub Actions starts a temporary MySQL service for that test when changes are pushed or a pull request is opened.
 
-## Application files
+## Technologies and Class 12 IP concepts
+
+**Python**
+
+* Variables and data types
+* Input and output
+* Conditional statements and loops
+* Functions and modules
+* Exception handling
+
+**MySQL**
+
+* Creating databases and tables
+* Adding, viewing, updating and deleting records
+* Filtering and sorting records
+* Aggregate functions such as `COUNT()`, `AVG()` and `SUM()`
+
+The Python program uses `mysql.connector` to connect to MySQL.
+
+The browser version uses HTML, CSS and JavaScript for its interface, local storage, filters, reports and CSV tools. These web files are separate from the Python and MySQL program.
+
+## Main project files
 
 | File | Purpose |
 | --- | --- |
 | `main.py` | Menu, input checks and record display |
 | `database.py` | MySQL connection and SQL operations |
-| `analysis.py` | Prints the summary returned by MySQL |
-| `db_config.py` | Local database settings |
+| `analysis.py` | Displays the summary returned by MySQL |
+| `db_config.py` | Database settings |
 | `sciatica.sql` | Creates the database and table |
-| `tests/` | Unit and MySQL integration tests |
-| `index.html` | Browser-based tracker and website |
+| `tests/` | Unit tests and MySQL integration tests |
+| `index.html` | Browser version of the tracker |
+| `style.css` | Website appearance |
+| `script.js` | Browser features and record handling |
 
-## Things to keep in mind
+## Important information
 
-- This is a learning application and a personal record-keeping tool, not a medical device. Its symptom checklist is educational only: it cannot diagnose or rule out sciatica. The website advises prompt medical assessment for new or worsening symptoms and emergency care for warning signs.
-- The averages and totals only describe the records entered. They do not prove that study time or walking breaks cause changes in pain.
-- The Python–MySQL version supports one daily record per date. The browser version additionally stores multiple subject-wise study sessions and multiple exercise records within that date’s entry.
-- The Python version expects MySQL to be installed and running locally.
-- Do not commit real personal health entries, passwords or other private information to this public repository.
-- The browser version keeps data on the current device only. Export a CSV backup before clearing browser data or changing devices.
+* This is a learning project and a personal record keeping tool. It cannot diagnose or rule out sciatica.
+* The educational information on the website is not personal medical advice. Seek advice from a qualified healthcare professional about symptoms or treatment.
+* The totals and averages describe only the entries that have been saved. They do not show that study time or walking activity causes a change in pain.
+* The Python and MySQL version stores one record per date. The browser version can also store multiple study sessions and exercise records within a daily entry.
+* The Python version needs MySQL to be installed and running.
+* Do not commit real health entries, passwords or other private information to this public repository.
+* Export a CSV backup before clearing browser data or moving to another device.
