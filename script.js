@@ -80,10 +80,14 @@ function renderMonthReport() {
   const avg = count ? (selected.reduce((sum,item)=>sum+Number(item.pain),0)/count).toFixed(1) : "—";
   const study = selected.reduce((sum,item)=>sum+Number(item.study),0);
   const walking = selected.reduce((sum,item)=>sum+Number(item.walking),0);
-  document.getElementById("monthStats").innerHTML = [
+  const monthItems = [
     ["Days recorded",count],["Average pain rating",avg],["Study hours",study.toFixed(2)],["Walking minutes",walking],
     ["Walking breaks",selected.reduce((sum,item)=>sum+Number(item.breaks),0)],["Entries this month",count]
-  ].map(([label,value])=>'<div class="report-cell"><span>'+label+'</span><strong>'+value+'</strong></div>').join("");
+  ];
+  const visibleMonthItems = document.body.dataset.audience === "adult"
+    ? monthItems.filter(([label]) => label !== "Study hours")
+    : monthItems;
+  document.getElementById("monthStats").innerHTML = visibleMonthItems.map(([label,value])=>'<div class="report-cell"><span>'+label+'</span><strong>'+value+'</strong></div>').join("");
   document.getElementById("monthCaption").textContent = month ? (count ? "Based on "+count+" saved "+(count===1?"entry":"entries")+" for "+month+". These are records, not a medical assessment." : "No entries have been saved for "+month+".") : "Choose a month to see its report.";
 }
 
@@ -247,7 +251,7 @@ function setAudience(mode) {
     : "Adult section selected.";
   document.getElementById("studentView").classList.toggle("primary", student);
   document.getElementById("adultView").classList.toggle("primary", !student);
-  renderPlanner();
+  render();
 }
 
 document.getElementById("studentView").addEventListener("click", () => setAudience("student"));
