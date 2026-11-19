@@ -12,7 +12,7 @@
 header{border-bottom:1px solid var(--line)}.bar{min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{font-size:13px;letter-spacing:.14em;font-weight:750;text-decoration:none}.brand span{color:var(--accent)}nav{display:flex;gap:20px}nav a{font-size:13px;color:#c8c8c8;text-decoration:none}nav a:hover{color:white}
 main{padding:42px 0 70px}.intro{display:flex;align-items:end;justify-content:space-between;gap:25px;margin-bottom:28px}.eyebrow,.small-label{color:var(--accent);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700}h1{font-size:clamp(34px,5vw,52px);line-height:1.05;letter-spacing:-.045em;margin:9px 0}.intro p{max-width:570px;color:var(--muted);margin:0}.privacy{font-size:12px;color:var(--green);white-space:nowrap}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0}.stat,.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px}.stat{padding:17px}.stat span{display:block;color:var(--muted);font-size:12px}.stat strong{display:block;font-size:27px;letter-spacing:-.04em;margin-top:4px;font-weight:650}
-.columns{display:grid;grid-template-columns:minmax(280px,.85fr) minmax(0,1.5fr);gap:14px;align-items:start}.panel{padding:22px}.panel h2{font-size:19px;letter-spacing:-.02em;margin:0 0 5px}.hint{font-size:12px;color:var(--muted);margin:0 0 18px}
+.columns{display:grid;grid-template-columns:minmax(280px,.85fr) minmax(0,1.5fr);gap:14px;align-items:start}.panel{padding:22px}.panel h2{font-size:19px;letter-spacing:-.02em;margin:0 0 5px}.hint{font-size:12px;color:var(--muted);margin:0 0 18px}.field-hint{display:block;color:var(--muted);font-size:11px;margin-top:4px}
 label{display:block;font-size:12px;color:#d5d5d5;margin:13px 0 6px}input,textarea{width:100%;background:#090909;border:1px solid #414141;border-radius:6px;padding:11px 12px;color:var(--white);outline:none}input:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 2px #d8b77e22}textarea{min-height:82px;resize:vertical}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:17px}
 button,.button{border:1px solid #555;background:#1b1b1b;color:var(--white);padding:10px 14px;border-radius:6px;cursor:pointer;text-decoration:none;font-size:13px;font-weight:650}button.primary{background:var(--white);color:#101010;border-color:var(--white)}button:hover,.button:hover{border-color:var(--accent)}button.danger{color:#f0aaa1}button:disabled{opacity:.45;cursor:not-allowed}
 .toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:16px 0}.toolbar input{max-width:230px}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:610px}th,td{text-align:left;padding:12px 9px;border-bottom:1px solid var(--line);font-size:13px}th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.08em}td.actions-cell{white-space:nowrap}td button{padding:6px 9px;font-size:11px;margin-right:4px}
@@ -56,13 +56,13 @@ footer{border-top:1px solid var(--line);padding:23px 0 35px;color:#888;font-size
 <section class="panel" id="entry"><h2 id="formTitle">Add a daily entry</h2><p class="hint">One entry per date. You can edit it later.</p>
 <form id="recordForm">
 <label for="date">Date</label><input id="date" type="date" required>
-<div class="two" id="pain-study-row"><div><label for="pain">Pain rating (0–10)</label><input id="pain" type="number" min="0" max="10" step="1" required placeholder="e.g. 4"></div><div id="study-hours-field"><label for="study">Study hours (0–24)</label><input id="study" type="number" min="0" max="24" step="0.25" required placeholder="e.g. 5"></div></div>
+<div class="two" id="pain-study-row"><div><label for="pain">Pain rating (0–10)</label><input id="pain" type="number" min="0" max="10" step="1" required><small class="field-hint">Example: 4</small></div><div id="study-hours-field"><label for="study">Study hours (0–24)</label><input id="study" type="number" min="0" max="24" step="0.25" required><small class="field-hint">Example: 5 hours</small></div></div>
 <div class="two"><div><label for="breaks">Walking breaks</label><input id="breaks" type="number" min="0" max="100" step="1" required value="0"></div><div><label for="walking">Walking minutes</label><input id="walking" type="number" min="0" max="1440" step="1" required value="0"></div></div>
-<label for="notes">Optional note</label><textarea id="notes" maxlength="500" placeholder="Anything you want to remember about this day"></textarea>
+<label for="notes">Optional note</label><textarea id="notes" maxlength="500"></textarea><small class="field-hint">Add anything you want to remember about this day.</small>
 <div class="actions"><button class="primary" type="submit" id="saveButton">Save entry</button><button type="button" id="cancelEdit" hidden>Cancel edit</button></div><div class="status" id="formStatus" role="status" aria-live="polite"></div>
 </form></section>
 <section class="panel" id="history"><h2>Entry history</h2><p class="hint">Search by date or note. Choose Edit to change a saved entry.</p>
-<div class="toolbar"><span class="small-label" id="entryCount">0 ENTRIES</span><input id="search" type="search" placeholder="Search entries…" aria-label="Search entries"></div>
+<div class="toolbar"><span class="small-label" id="entryCount">0 ENTRIES</span><input id="search" type="search" aria-label="Search entries"><small class="field-hint">Search by date or note.</small></div>
 <div class="filter-row" aria-label="Filter and sort records">
 <label class="sr-only" for="fromDate">From date</label><input id="fromDate" type="date" aria-label="Filter from date">
 <label class="sr-only" for="toDate">To date</label><input id="toDate" type="date" aria-label="Filter to date">
@@ -79,18 +79,18 @@ footer{border-top:1px solid var(--line);padding:23px 0 35px;color:#888;font-size
 <div class="two"><div><label for="plannerDate">Planner date</label><input id="plannerDate" type="date"></div><div><label for="plannerStatusText">Daily record status</label><input id="plannerStatusText" type="text" readonly value="Select a date with a saved daily entry"></div></div>
 <div class="info-grid">
 <div class="info-card" id="study-session-card"><h2>Study session</h2>
-<label for="studySubject">Subject</label><input id="studySubject" maxlength="60" placeholder="e.g. Informatics Practices">
-<label for="studyTopic">Chapter / topic</label><input id="studyTopic" maxlength="100" placeholder="e.g. SQL aggregate functions">
+<label for="studySubject">Subject</label><input id="studySubject" maxlength="60"><small class="field-hint">Example: Informatics Practices</small>
+<label for="studyTopic">Chapter / topic</label><input id="studyTopic" maxlength="100"><small class="field-hint">Example: SQL aggregate functions</small>
 <div class="two"><div><label for="plannedMinutes">Planned minutes</label><input id="plannedMinutes" type="number" min="1" max="1440" step="1"></div><div><label for="actualMinutes">Actual minutes</label><input id="actualMinutes" type="number" min="0" max="1440" step="1"></div></div>
 <button type="button" class="primary" id="addStudySession">Add study session</button>
 <div id="studySessionList" class="chart-list"><div class="empty">No sessions recorded for this date.</div></div>
 </div>
 <div class="info-card" id="exercise-card"><h2>Doctor-advised exercise record</h2>
-<label for="exerciseName">Exercise name (as advised)</label><input id="exerciseName" maxlength="100" placeholder="Enter the name given by your clinician">
-<div class="two"><div><label for="exerciseDuration">Advised duration (minutes)</label><input id="exerciseDuration" type="number" min="0" max="1440" step="1"></div><div><label for="exerciseReps">Advised repetitions</label><input id="exerciseReps" type="number" min="0" max="1000" step="1" placeholder="If applicable"></div></div>
-<div class="two"><div><label for="exerciseSets">Advised sets</label><input id="exerciseSets" type="number" min="0" max="100" step="1" placeholder="If applicable"></div><div><label for="exerciseActual">Actual minutes</label><input id="exerciseActual" type="number" min="0" max="1440" step="1" value="0"></div></div>
-<label for="exerciseTiming">Timing / reminder (optional)</label><input id="exerciseTiming" maxlength="80" placeholder="e.g. between study blocks">
-<label for="exerciseNotes">Notes (optional)</label><input id="exerciseNotes" maxlength="160" placeholder="Only details provided by your clinician">
+<label for="exerciseName">Exercise name (as advised)</label><input id="exerciseName" maxlength="100"><small class="field-hint">Enter the name given by your clinician.</small>
+<div class="two"><div><label for="exerciseDuration">Advised duration (minutes)</label><input id="exerciseDuration" type="number" min="0" max="1440" step="1"></div><div><label for="exerciseReps">Advised repetitions</label><input id="exerciseReps" type="number" min="0" max="1000" step="1"><small class="field-hint">Enter a value only if your clinician specified one.</small></div></div>
+<div class="two"><div><label for="exerciseSets">Advised sets</label><input id="exerciseSets" type="number" min="0" max="100" step="1"><small class="field-hint">Enter a value only if your clinician specified one.</small></div><div><label for="exerciseActual">Actual minutes</label><input id="exerciseActual" type="number" min="0" max="1440" step="1" value="0"></div></div>
+<label for="exerciseTiming">Timing / reminder (optional)</label><input id="exerciseTiming" maxlength="80"><small class="field-hint">Example: between study blocks</small>
+<label for="exerciseNotes">Notes (optional)</label><input id="exerciseNotes" maxlength="160"><small class="field-hint">Record only details provided by your clinician.</small>
 <button type="button" class="primary" id="addExercise">Add advised exercise</button>
 <div id="exerciseList" class="chart-list"><div class="empty">No exercises recorded for this date.</div></div>
 </div>
