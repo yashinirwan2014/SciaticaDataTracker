@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#090909">
 <meta name="description" content="A private, browser-based wellbeing tracker with student and adult views, daily activity records and study planning. Records stay on this device.">
 <title>Sciatica & Wellbeing Tracker</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=adult-view-fix-1">
 </head>
 <body>
 <div class="site-header"><div class="wrap bar"><a class="brand" href="#">WELLBEING <span>/</span> DAILY TRACKER</a><div class="site-nav" aria-label="Main navigation"><a href="#audience-choice">Choose view</a><a href="#entry">Daily entry</a><a href="#study-planner">Planner</a><a href="#history">History</a><a href="#health-info">Health info</a></div></div></div>
@@ -20,7 +20,7 @@
 </div><div class="status" id="audienceStatus" role="status" aria-live="polite"></div>
 </div>
 <div class="stats" aria-label="Summary statistics">
-<div class="stat"><span>Days recorded</span><strong id="totalDays">0</strong></div><div class="stat"><span>Average pain rating</span><strong id="avgPain">—</strong></div><div class="stat"><span>Total study hours</span><strong id="totalStudy">0</strong></div><div class="stat"><span>Total walking minutes</span><strong id="totalWalk">0</strong></div>
+<div class="stat"><span>Days recorded</span><strong id="totalDays">0</strong></div><div class="stat"><span>Average pain rating</span><strong id="avgPain">—</strong></div><div class="stat" id="study-hours-stat"><span>Total study hours</span><strong id="totalStudy">0</strong></div><div class="stat"><span>Total walking minutes</span><strong id="totalWalk">0</strong></div>
 </div>
 <div class="columns">
 <div class="panel" id="entry"><h2 id="formTitle">Add a daily entry</h2><p class="hint">One entry per date. You can edit it later.</p>
@@ -139,6 +139,6 @@
 </div>
 <div class="site-footer"><div class="wrap">SCIATICA DATA TRACKER · AN APPLICATION OF CBSE CLASS 12 INFORMATICS PRACTICES CONCEPTS · <a href="https://github.com/yashinirwan2014/SciaticaDataTracker">View source on GitHub</a></div></div>
 
-<script src="script.js"></script>
+<script src="script.js?v=adult-view-fix-1"></script>
 </body>
 </html>
