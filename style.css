@@ -27,3 +27,15 @@ button,.button{border:1px solid #555;background:#1b1b1b;color:var(--white);paddi
 .filter-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.filter-row input,.filter-row select{max-width:190px}
 @media(max-width:700px){.info-grid{grid-template-columns:1fr}.report-grid{grid-template-columns:1fr 1fr}.filter-row input,.filter-row select{max-width:none;flex:1}}
 @media print{body{background:white!important;color:#111!important}.panel,.stat,.info-card,.notice{background:white!important;color:#111!important;border-color:#ccc!important}.site-header,.site-footer,.actions,button,.toolbar input,.filter-row,.privacy{display:none!important}.hint,.info-card p,.info-card li,.notice{color:#333!important}.columns{display:block}.panel{break-inside:avoid}.stat strong{color:#111!important}}
+
+
+/* Keep study-only information out of the Adult view. */
+body[data-audience="adult"] #study-hours-stat,
+body[data-audience="adult"] #study-hours-field,
+body[data-audience="adult"] #study-session-card,
+body[data-audience="adult"] #history table th:nth-child(3),
+body[data-audience="adult"] #history table td:nth-child(3) {
+  display: none !important;
+}
+
+body[data-audience="adult"] #sortRecords option[value="study-high"] { display: none; }
