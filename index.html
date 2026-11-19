@@ -357,7 +357,11 @@ function renderPlanner() {
   makeList("studySessionList",sessions,"study"); makeList("exerciseList",exercises,"exercise");
   const planned = sessions.reduce((sum,x)=>sum+Number(x.planned),0), actual = sessions.reduce((sum,x)=>sum+Number(x.actual),0);
   const exerciseTime = exercises.reduce((sum,x)=>sum+Number(x.actual),0);
-  document.getElementById("plannerSummary").innerHTML = [["Study sessions",sessions.length],["Planned study",planned+" min"],["Actual study",actual+" min"],["Exercises recorded",exercises.length],["Exercise time logged",exerciseTime+" min"],["Walking breaks",record ? record.breaks : 0]].map(([label,value])=>'<div class="report-cell"><span>'+label+'</span><strong>'+value+'</strong></div>').join("");
+  const summaryItems = [["Study sessions",sessions.length],["Planned study",planned+" min"],["Actual study",actual+" min"],["Exercises recorded",exercises.length],["Exercise time logged",exerciseTime+" min"],["Walking breaks",record ? record.breaks : 0]];
+  const visibleSummaryItems = document.body.dataset.audience === "adult"
+    ? summaryItems.filter(([label]) => !["Study sessions","Planned study","Actual study"].includes(label))
+    : summaryItems;
+  document.getElementById("plannerSummary").innerHTML = visibleSummaryItems.map(([label,value])=>'<div class="report-cell"><span>'+label+'</span><strong>'+value+'</strong></div>').join("");
 }
 function savePlannerItem(type,item) {
   const record = plannerRecord();
@@ -397,6 +401,7 @@ function resetForm() {
 
 function setAudience(mode) {
   const student = mode === "student";
+  document.body.dataset.audience = mode;
   const studyHoursField = document.getElementById("study-hours-field");
   const studyHoursInput = document.getElementById("study");
   studyHoursField.hidden = !student;
@@ -428,6 +433,7 @@ function setAudience(mode) {
     : "Adult section selected.";
   document.getElementById("studentView").classList.toggle("primary", student);
   document.getElementById("adultView").classList.toggle("primary", !student);
+  renderPlanner();
 }
 
 document.getElementById("studentView").addEventListener("click", () => setAudience("student"));
