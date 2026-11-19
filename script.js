@@ -311,51 +311,145 @@ document.getElementById("clearSymptoms").addEventListener("click",()=>{
   showStatus("symptomResult","Checklist cleared. No answers are saved.",false);
 });
 function csvCell(value) {
-  const text = String(value ?? "");
-  return '"' + text.replace(/"/g,'""') + '"';
+  let text = value;
+  if (Array.isArray(value) || (value && typeof value === "object")) {
+    text = JSON.stringify(value);
+  } else if (value === null || value === undefined) {
+    text = "";
+  } else {
+    text = String(value);
+  }
+  return '"' + text.replace(/"/g, '""') + '"';
 }
-document.getElementById("exportCsv").addEventListener("click",() => {
-  const headings = ["date","pain","study","breaks","walking","notes","studySessions","exercises"];
-  const lines = [headings.join(","),...sortedRecords().map(item => headings.map(key => csvCell(item[key])).join(","))];
-  const blob = new Blob(["\uFEFF" + lines.join("\r\n")],{type:"text/csv;charset=utf-8"});
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a"); link.href = url; link.download = "sciatica-tracker-backup.csv"; link.click();
-  URL.revokeObjectURL(url); showStatus("fileStatus","CSV backup exported.",false);
-});
-document.getElementById("importButton").addEventListener("click",() => document.getElementById("importFile").click());
-document.getElementById("importFile").addEventListener("change",async event => {
-  const file = event.target.files[0]; if (!file) return;
-  try {
-    const text = await file.text();
-    const lines = text.replace(/^\uFEFF/,"").split(/\r?\n/).filter(line => line.trim());
-    if (lines.length < 2) throw new Error("The CSV file has no records.");
-    const parseLine = line => {
-      const cells = []; let value = ""; let quoted = false;
-      for (let i=0;i<line.length;i++) {
-        const char = line[i];
-        if (char === '"' && quoted && line[i+1] === '"') { value += '"'; i++; }
-        else if (char === '"') quoted = !quoted;
-        else if (char === "," && !quoted) { cells.push(value); value = ""; }
-        else value += char;
+
+function parseCSV(csvText) {
+  const rows = [];
+  let row = [];
+  let value = "";
+  let insideQuotes = false;
+
+  for (let i = 0; i < csvText.length; i++) {
+    const character = csvText[i];
+
+    if (character === '"') {
+      if (insideQuotes && csvText[i + 1] === '"') {
+        value += '"';
+        i++;
+      } else {
+        insideQuotes = !insideQuotes;
       }
-      cells.push(value); return cells;
-    };
-    const headings = parseLine(lines[0]).map(value => value.trim().toLowerCase());
+    } else if (character === "," && !insideQuotes) {
+      row.push(value);
+      value = "";
+    } else if ((character === "\n" || character === "\r") && !insideQuotes) {
+      if (character === "\r" && csvText[i + 1] === "\n") i++;
+      row.push(value);
+      if (row.some(cell => cell.trim() !== "")) rows.push(row);
+      row = [];
+      value = "";
+    } else {
+      value += character;
+    }
+  }
+
+  if (insideQuotes) {
+    throw new Error("The CSV file has an unfinished quoted value.");
+  }
+
+  row.push(value);
+  if (row.some(cell => cell.trim() !== "")) rows.push(row);
+  return rows;
+}
+
+document.getElementById("exportCsv").addEventListener("click", () => {
+  const headings = ["date","pain","study","breaks","walking","notes","studySessions","exercises"];
+  const lines = [headings.map(csvCell).join(",")];
+
+  sortedRecords().forEach(item => {
+    const line = headings.map(key => csvCell(item[key])).join(",");
+    lines.push(line);
+  });
+
+  const blob = new Blob(["\uFEFF" + lines.join("\r\n")], {
+    type: "text/csv;charset=utf-8"
+  });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "sciatica-tracker-backup.csv";
+  link.click();
+  URL.revokeObjectURL(url);
+  showStatus("fileStatus", "CSV backup exported.", false);
+});
+
+document.getElementById("importButton").addEventListener("click", () => {
+  document.getElementById("importFile").click();
+});
+
+document.getElementById("importFile").addEventListener("change", async event => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  try {
+    const csvText = (await file.text()).replace(/^\uFEFF/, "");
+    const rows = parseCSV(csvText);
+
+    if (rows.length < 2) {
+      throw new Error("The CSV file has no records.");
+    }
+
+    const headings = rows[0].map(value => value.trim().toLowerCase());
     const required = ["date","pain","study","breaks","walking","notes"];
-    if (!required.every(key => headings.includes(key))) throw new Error("CSV columns must be: date, pain, study, breaks, walking, notes.");
-    const imported = lines.slice(1).map(line => {
-      const cells = parseLine(line); const item = {};
-      required.forEach(key => item[key] = cells[headings.indexOf(key)] ?? "");
-      ["pain","study","breaks","walking"].forEach(key => item[key] = Number(item[key]));
-      ["studySessions","exercises"].forEach(key => { const index=headings.indexOf(key); item[key]=index>=0 && cells[index] ? JSON.parse(cells[index]) : []; });
-      return item;
+
+    if (!required.every(key => headings.includes(key))) {
+      throw new Error("CSV columns must include: date, pain, study, breaks, walking and notes.");
+    }
+
+    const imported = [];
+    for (let i = 1; i < rows.length; i++) {
+      const cells = rows[i];
+      if (cells.length !== headings.length) {
+        throw new Error("A CSV row has a different number of columns.");
+      }
+
+      const item = {};
+      required.forEach(key => {
+        item[key] = cells[headings.indexOf(key)];
+      });
+
+      ["pain","study","breaks","walking"].forEach(key => {
+        item[key] = Number(item[key]);
+      });
+
+      ["studySessions","exercises"].forEach(key => {
+        const index = headings.indexOf(key);
+        item[key] = index >= 0 && cells[index] ? JSON.parse(cells[index]) : [];
+      });
+
+      if (!isValidRecord(item)) {
+        throw new Error("One or more rows contain invalid values.");
+      }
+      imported.push(item);
+    }
+
+    if (!confirm("Import " + imported.length + " entries? Existing dates will be replaced.")) {
+      return;
+    }
+
+    imported.forEach(item => {
+      records = records.filter(record => record.date !== item.date);
+      records.push(item);
     });
-    if (!imported.every(isValidRecord)) throw new Error("One or more rows contain invalid values.");
-    if (!confirm("Import " + imported.length + " entries? Existing dates will be replaced.")) return;
-    imported.forEach(item => { records = records.filter(record => record.date !== item.date); records.push(item); });
-    if (saveRecords()) { render(); showStatus("fileStatus",imported.length + " entries imported.",false); }
-  } catch (error) { showStatus("fileStatus",error.message || "Could not read this CSV file.",true); }
-  finally { event.target.value = ""; }
+
+    if (saveRecords()) {
+      render();
+      showStatus("fileStatus", imported.length + " entries imported.", false);
+    }
+  } catch (error) {
+    showStatus("fileStatus", error.message || "Could not read this CSV file.", true);
+  } finally {
+    event.target.value = "";
+  }
 });
 document.getElementById("date").value = new Date().toLocaleDateString("en-CA");
 document.getElementById("recordRows").closest("table").hidden = true;
